@@ -1,0 +1,10 @@
+﻿@Backend_HostAddress = https://localhost:7136
+
+POST {{Backend_HostAddress}}/
+Content-Type: application/json
+
+{
+  "Url":"https://www.google.com/"
+}
+
+###

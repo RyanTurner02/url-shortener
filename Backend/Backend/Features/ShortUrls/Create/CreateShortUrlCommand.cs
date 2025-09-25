@@ -1,6 +1,10 @@
-﻿namespace Backend.Features.ShortUrls.Create
+﻿using MediatR;
+
+namespace Backend.Features.ShortUrls.Create
 {
-    public class CreateShortUrlCommand
-    {
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Url">The URL to shorten</param>
+    public record CreateShortUrlCommand(string Url) : IRequest<string>;
 }
