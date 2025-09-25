@@ -2,9 +2,16 @@
 
 POST {{Backend_HostAddress}}/
 Content-Type: application/json
-
 {
   "Url":"https://www.google.com/"
+}
+
+###
+
+POST {{Backend_HostAddress}}/
+Content-Type: application/json
+{
+  "Url":"https://www.youtube.com/"
 }
 
 ###
