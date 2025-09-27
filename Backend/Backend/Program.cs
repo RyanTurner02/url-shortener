@@ -1,5 +1,6 @@
 using Backend.Features.ShortUrls;
 using Backend.Features.ShortUrls.Create;
+using Backend.Features.ShortUrls.Get;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,5 +15,6 @@ builder.Services.AddScoped<ICreateShortUrlRepository, CreateShortUrlRepository>(
 var app = builder.Build();
 
 app.RegisterCreateShortUrlEndpoint();
+app.RegisterGetShortUrlEndpoint();
 
 app.Run();

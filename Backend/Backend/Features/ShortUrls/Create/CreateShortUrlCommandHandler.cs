@@ -47,7 +47,7 @@ namespace Backend.Features.ShortUrls.Create
         /// <returns>The shortened URL.</returns>
         private string ShortenUrl(string url)
         {
-            return url;
+            return url.Replace("https://www.", string.Empty);
         }
     }
 }

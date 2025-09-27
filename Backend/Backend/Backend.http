@@ -3,7 +3,7 @@
 POST {{Backend_HostAddress}}/
 Content-Type: application/json
 {
-  "Url":"https://www.google.com/"
+  "Url":"https://www.google.com"
 }
 
 ###
@@ -11,7 +11,13 @@ Content-Type: application/json
 POST {{Backend_HostAddress}}/
 Content-Type: application/json
 {
-  "Url":"https://www.youtube.com/"
+  "Url":"https://www.youtube.com"
 }
 
 ###
+
+GET {{Backend_HostAddress}}/google.com
+
+###
+
+GET {{Backend_HostAddress}}/youtube.com
