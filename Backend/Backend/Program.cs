@@ -11,6 +11,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddScoped<ICreateShortUrlRepository, CreateShortUrlRepository>();
+builder.Services.AddScoped<IGetShortUrlRepository, GetShortUrlRepository>();
 
 var app = builder.Build();
 

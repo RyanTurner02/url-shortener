@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Features.ShortUrls.Get
 {
@@ -9,17 +8,17 @@ namespace Backend.Features.ShortUrls.Get
     public class GetShortUrlQueryHandler : IRequestHandler<GetShortUrlQuery, string?>
     {
         /// <summary>
-        /// The short URL database context.
+        /// The get short URL repository.
         /// </summary>
-        private readonly ShortUrlDbContext _context;
+        private readonly IGetShortUrlRepository _getShortUrlRepository;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="context">The short URL database context.</param>
-        public GetShortUrlQueryHandler(ShortUrlDbContext context)
+        /// <param name="getShortUrlRepository">The get short URL repository.</param>
+        public GetShortUrlQueryHandler(IGetShortUrlRepository getShortUrlRepository)
         {
-            _context = context;
+            _getShortUrlRepository = getShortUrlRepository;
         }
 
         /// <summary>
@@ -30,9 +29,7 @@ namespace Backend.Features.ShortUrls.Get
         /// <returns>The original URL</returns>
         public async Task<string?> Handle(GetShortUrlQuery request, CancellationToken cancellationToken)
         {
-            var shortUrl = await _context.ShortUrls
-                .Where(x => x.ShortenedUrl == request.ShortUrl)
-                .FirstOrDefaultAsync();
+            var shortUrl = await _getShortUrlRepository.GetShortUrl(request.ShortUrl);
 
             return shortUrl?.OriginalUrl;
         }
