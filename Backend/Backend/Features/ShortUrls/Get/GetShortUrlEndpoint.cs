@@ -7,6 +7,10 @@ namespace Backend.Features.ShortUrls.Get
     /// </summary>
     public static class GetShortUrlEndpoint
     {
+        /// <summary>
+        /// Registers the endpoint for getting shortened URLs.
+        /// </summary>
+        /// <param name="app">The web application.</param>
         public static void RegisterGetShortUrlEndpoint(this WebApplication app)
         {
             app.MapGet("/{shortUrl}", GetShortUrl);
