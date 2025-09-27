@@ -1,5 +1,8 @@
 ﻿namespace Backend.Features.ShortUrls.Create
 {
+    /// <summary>
+    /// Interface for adding short URLs to the database.
+    /// </summary>
     public interface ICreateShortUrlRepository
     {
         /// <summary>

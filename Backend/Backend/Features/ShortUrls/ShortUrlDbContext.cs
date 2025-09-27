@@ -3,12 +3,12 @@
 namespace Backend.Features.ShortUrls
 {
     /// <summary>
-    /// Represents the Entity Framework database context for short URL operations.
+    /// The Entity Framework database context for short URL operations.
     /// </summary>
     public class ShortUrlDbContext : DbContext
     {
         /// <summary>
-        /// Gets or sets the <see cref="DbSet{ShortUrl}"/> representing the short URLs table.
+        /// Gets/Sets the <see cref="DbSet{ShortUrl}"/> representing the short URLs table.
         /// </summary>
         /// <remarks>
         /// Use this property to query, insert, update, or delete <see cref="ShortUrl"/> entities in the database.
