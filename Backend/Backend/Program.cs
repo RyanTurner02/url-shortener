@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddOpenApi();
+
 builder.Services.AddDbContext<ShortUrlDbContext>(opt => opt.UseInMemoryDatabase("ShortUrl"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -14,6 +16,11 @@ builder.Services.AddScoped<ICreateShortUrlRepository, CreateShortUrlRepository>(
 builder.Services.AddScoped<IGetShortUrlRepository, GetShortUrlRepository>();
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
 
 app.RegisterCreateShortUrlEndpoint();
 app.RegisterGetShortUrlEndpoint();
