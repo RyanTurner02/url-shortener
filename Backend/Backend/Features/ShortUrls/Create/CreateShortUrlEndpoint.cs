@@ -28,14 +28,12 @@ namespace Backend.Features.ShortUrls.Create
         /// </summary>
         /// <param name="createShortUrlCommand">The create short URL command.</param>
         /// <param name="sender">The sender.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The status of creating the short URL.</returns>
         private static async Task<IResult> CreateShortUrl(
             CreateShortUrlCommand createShortUrlCommand,
-            ISender sender,
-            CancellationToken cancellationToken)
+            ISender sender)
         {
-            var shortUrl = await sender.Send(createShortUrlCommand, cancellationToken);
+            var shortUrl = await sender.Send(createShortUrlCommand);
             return TypedResults.Created(ROUTE, new ShortUrlResponse(shortUrl));
         }
     }
