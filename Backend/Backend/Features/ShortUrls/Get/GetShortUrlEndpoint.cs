@@ -15,6 +15,7 @@ namespace Backend.Features.ShortUrls.Get
         {
             app.MapGet("/api/{shortUrl}", GetShortUrl)
                 .WithSummary("Retrieves the original URL from a short URL.")
+                .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status302Found)
                 .Produces(StatusCodes.Status404NotFound);
         }
@@ -25,6 +26,7 @@ namespace Backend.Features.ShortUrls.Get
         /// <param name="shortUrl">The short URL.</param>
         /// <param name="sender">The sender.</param>
         /// <returns>
+        /// 200: Returns the original URL if found.
         /// 302: Redirects to the original URL if found.
         /// 404: If the original URL is not found.
         /// </returns>
