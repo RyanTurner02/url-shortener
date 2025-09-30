@@ -30,7 +30,8 @@ namespace Backend.Features.ShortUrls.Get
         /// </returns>
         private static async Task<IResult> GetShortUrl(
             string shortUrl,
-            ISender sender)
+            ISender sender,
+            HttpRequest req)
         {
             var originalUrl = await sender.Send(
                 new GetShortUrlQuery(shortUrl));
@@ -40,7 +41,12 @@ namespace Backend.Features.ShortUrls.Get
                 return TypedResults.NotFound();
             }
 
-            return TypedResults.Redirect(originalUrl);
+            if (req.Headers["sec-fetch-mode"] == "navigate")
+            {
+                return TypedResults.Redirect(originalUrl);
+            }
+
+            return TypedResults.Ok(new UrlResponse(originalUrl));
         }
     }
 }
