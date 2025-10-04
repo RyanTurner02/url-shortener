@@ -19,6 +19,7 @@ namespace Backend.Features.ShortUrls.Create
         public static void RegisterCreateShortUrlEndpoint(this WebApplication app)
         {
             app.MapPost(ROUTE, CreateShortUrl)
+                .WithTags("Create Short URL")
                 .WithSummary("Creates a shortened URL from a URL.")
                 .Produces(StatusCodes.Status201Created);
         }
