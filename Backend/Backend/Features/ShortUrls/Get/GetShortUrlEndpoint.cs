@@ -13,7 +13,12 @@ namespace Backend.Features.ShortUrls.Get
         /// <param name="app">The web application.</param>
         public static void RegisterGetShortUrlEndpoint(this WebApplication app)
         {
-            app.MapGet("/{shortUrl}", GetShortUrl);
+            app.MapGet("/api/{shortUrl}", GetShortUrl)
+                .WithTags("Get Short URL")
+                .WithSummary("Retrieves the original URL from a short URL.")
+                .Produces(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status302Found)
+                .Produces(StatusCodes.Status404NotFound);
         }
 
         /// <summary>
@@ -22,12 +27,14 @@ namespace Backend.Features.ShortUrls.Get
         /// <param name="shortUrl">The short URL.</param>
         /// <param name="sender">The sender.</param>
         /// <returns>
+        /// 200: Returns the original URL if found.
         /// 302: Redirects to the original URL if found.
         /// 404: If the original URL is not found.
         /// </returns>
         private static async Task<IResult> GetShortUrl(
             string shortUrl,
-            ISender sender)
+            ISender sender,
+            HttpRequest req)
         {
             var originalUrl = await sender.Send(
                 new GetShortUrlQuery(shortUrl));
@@ -37,7 +44,12 @@ namespace Backend.Features.ShortUrls.Get
                 return TypedResults.NotFound();
             }
 
-            return TypedResults.Redirect(originalUrl);
+            if (req.Headers["sec-fetch-mode"] == "navigate")
+            {
+                return TypedResults.Redirect(originalUrl);
+            }
+
+            return TypedResults.Ok(new UrlResponse(originalUrl));
         }
     }
 }
