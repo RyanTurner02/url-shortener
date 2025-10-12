@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36511.14 d17.14
+VisualStudioVersion = 17.14.36511.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{342382B9-33BC-4470-A035-23EE909CBDF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Url.Shortener.Tests", "Url.Shortener.Tests\Url.Shortener.Tests.csproj", "{C6210165-0E67-427B-9162-0E045D8B08DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{342382B9-33BC-4470-A035-23EE909CBDF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{342382B9-33BC-4470-A035-23EE909CBDF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{342382B9-33BC-4470-A035-23EE909CBDF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6210165-0E67-427B-9162-0E045D8B08DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6210165-0E67-427B-9162-0E045D8B08DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6210165-0E67-427B-9162-0E045D8B08DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6210165-0E67-427B-9162-0E045D8B08DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
