@@ -13,7 +13,7 @@ namespace Backend.Features.ShortUrls
         /// <remarks>
         /// Use this property to query, insert, update, or delete <see cref="ShortUrl"/> entities in the database.
         /// </remarks>
-        public DbSet<ShortUrl> ShortUrls { get; set; }
+        public virtual DbSet<ShortUrl> ShortUrls { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShortUrlDbContext"/> class with the specified options.
@@ -21,6 +21,6 @@ namespace Backend.Features.ShortUrls
         /// <param name="options">
         /// The configuration options for the database context, including provider and connection details.
         /// </param>
-        public ShortUrlDbContext(DbContextOptions options) : base(options) { }
+        public ShortUrlDbContext(DbContextOptions<ShortUrlDbContext> options) : base(options) { }
     }
 }
