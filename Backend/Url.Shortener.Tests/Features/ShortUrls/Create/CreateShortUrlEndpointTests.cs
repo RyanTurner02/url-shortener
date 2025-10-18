@@ -37,7 +37,11 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
             var payload = new { url = "https://www.youtube.com" };
             var response = await client.PostAsJsonAsync(route, payload);
 
+            var expectedBody = new ShortUrlResponse("youtube.com");
+            var body = await response.Content.ReadFromJsonAsync<ShortUrlResponse>();
+
             Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(expectedBody, body);
             Assert.Equal(route, response.Headers.Location?.OriginalString);
 
             senderMock.Verify(s => s.Send(
