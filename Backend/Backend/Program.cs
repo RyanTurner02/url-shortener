@@ -28,3 +28,5 @@ app.RegisterCreateShortUrlEndpoint();
 app.RegisterGetShortUrlEndpoint();
 
 app.Run();
+
+public partial class Program { }
