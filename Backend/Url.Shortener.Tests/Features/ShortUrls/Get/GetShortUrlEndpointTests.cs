@@ -1,4 +1,4 @@
-﻿using Backend.Features.ShortUrls.Get;
+﻿using Url.Shortener.Features.ShortUrls.Get;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;

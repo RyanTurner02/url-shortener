@@ -1,4 +1,4 @@
-﻿namespace Backend.Features.ShortUrls.Create
+﻿namespace Url.Shortener.Features.ShortUrls.Create
 {
     /// <summary>
     /// The short URL response.

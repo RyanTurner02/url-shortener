@@ -1,5 +1,5 @@
-﻿using Backend.Features.ShortUrls;
-using Backend.Features.ShortUrls.Create;
+﻿using Url.Shortener.Features.ShortUrls;
+using Url.Shortener.Features.ShortUrls.Create;
 using Microsoft.EntityFrameworkCore;
 
 namespace Url.Shortener.Tests.Features.ShortUrls.Create

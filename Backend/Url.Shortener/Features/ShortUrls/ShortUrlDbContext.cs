@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Features.ShortUrls
+namespace Url.Shortener.Features.ShortUrls
 {
     /// <summary>
     /// The Entity Framework database context for short URL operations.

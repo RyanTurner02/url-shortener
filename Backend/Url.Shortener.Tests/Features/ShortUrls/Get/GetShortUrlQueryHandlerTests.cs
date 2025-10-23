@@ -1,5 +1,5 @@
-﻿using Backend.Features.ShortUrls;
-using Backend.Features.ShortUrls.Get;
+﻿using Url.Shortener.Features.ShortUrls;
+using Url.Shortener.Features.ShortUrls.Get;
 using Moq;
 
 namespace Url.Shortener.Tests.Features.ShortUrls.Get

@@ -1,4 +1,4 @@
-﻿namespace Backend.Features.ShortUrls
+﻿namespace Url.Shortener.Features.ShortUrls
 {
     /// <summary>
     /// Entity class for storing the mapping between an original URL and its shortened form.

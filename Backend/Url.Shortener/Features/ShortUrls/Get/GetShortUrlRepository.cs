@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Features.ShortUrls.Get
+namespace Url.Shortener.Features.ShortUrls.Get
 {
     /// <summary>
     /// Repository class for getting short URL entries from the database.

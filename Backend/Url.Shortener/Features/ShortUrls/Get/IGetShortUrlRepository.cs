@@ -1,4 +1,4 @@
-﻿namespace Backend.Features.ShortUrls.Get
+﻿namespace Url.Shortener.Features.ShortUrls.Get
 {
     /// <summary>
     /// Interface for getting short URL entries from the database.
