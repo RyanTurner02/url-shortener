@@ -8,7 +8,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Get
     public sealed class GetShortUrlRepositoryTests
     {
         [Fact]
-        public async Task GetShortUrl_ShortenedUrl_ReturnsShortUrlObject()
+        public async Task GetShortUrl_ReturnsShortUrlObject()
         {
             var originalUrl = "https://youtube.com";
             var shortenedUrl = "youtube.com";

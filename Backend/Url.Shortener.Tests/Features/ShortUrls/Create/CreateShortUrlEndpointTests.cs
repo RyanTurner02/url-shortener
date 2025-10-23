@@ -10,7 +10,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
     public sealed class CreateShortUrlEndpointTests
     {
         [Fact]
-        public async Task CreateShortUrl_OriginalUrl_ResponseIsSuccessCode()
+        public async Task CreateShortUrl_ReturnsCreated()
         {
             var senderMock = new Mock<ISender>();
 

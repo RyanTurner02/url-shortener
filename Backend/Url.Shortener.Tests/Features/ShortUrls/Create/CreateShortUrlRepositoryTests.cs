@@ -7,7 +7,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
     public sealed class CreateShortUrlRepositoryTests
     {
         [Fact]
-        public async Task AddShortUrl_SingleShortUrl_ReturnsOneEntry()
+        public async Task AddShortUrl_ReturnsOneEntry()
         {
             var databaseName = $"AddShortUrl_{Guid.NewGuid()}";
             var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()

@@ -9,7 +9,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
         [Theory]
         [InlineData("https://www.google.com/", "google.com/")]
         [InlineData("https://www.youtube.com/", "youtube.com/")]
-        public async Task Handle_OriginalUrl_ReturnsShortenedUrl(string originalUrl, string shortenedUrl)
+        public async Task Handle_ReturnsShortenedUrl(string originalUrl, string shortenedUrl)
         {
             var mockRepository = new Mock<ICreateShortUrlRepository>();
             var createShortUrlCommandHandler = new CreateShortUrlCommandHandler(mockRepository.Object);
