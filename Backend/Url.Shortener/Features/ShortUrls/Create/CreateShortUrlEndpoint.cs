@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backend.Features.ShortUrls.Create
+namespace Url.Shortener.Features.ShortUrls.Create
 {
     /// <summary>
     /// Endpoint class for creating shortened URLs.

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backend.Features.ShortUrls.Get
+namespace Url.Shortener.Features.ShortUrls.Get
 {
     /// <summary>
     /// Endpoint class for getting shortened URLs.

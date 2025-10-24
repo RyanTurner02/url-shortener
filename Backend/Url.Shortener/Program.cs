@@ -1,6 +1,6 @@
-using Backend.Features.ShortUrls;
-using Backend.Features.ShortUrls.Create;
-using Backend.Features.ShortUrls.Get;
+using Url.Shortener.Features.ShortUrls;
+using Url.Shortener.Features.ShortUrls.Create;
+using Url.Shortener.Features.ShortUrls.Get;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -28,3 +28,5 @@ app.RegisterCreateShortUrlEndpoint();
 app.RegisterGetShortUrlEndpoint();
 
 app.Run();
+
+public partial class Program { }
