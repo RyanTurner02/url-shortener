@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using Base62;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Url.Shortener.Features.ShortUrls.Create
@@ -17,9 +18,10 @@ namespace Url.Shortener.Features.ShortUrls.Create
             }
 
             var hashedUrl = HashUrl(originalUrl);
+            var encodedUrl = EncodeUrl(hashedUrl);
 
             var shortUrlLength = 7;
-            return GetRandomCharacters(shortUrlLength, hashedUrl);
+            return GetRandomCharacters(shortUrlLength, encodedUrl);
         }
 
         /// <summary>
@@ -43,6 +45,17 @@ namespace Url.Shortener.Features.ShortUrls.Create
             }
 
             return hashedUrl.ToString();
+        }
+
+        /// <summary>
+        /// Encodes the hashed url using Base62.
+        /// </summary>
+        /// <param name="hashedUrl">The url.</param>
+        /// <returns>The Base62 encoding of the hashed url.</returns>
+        private string EncodeUrl(string hashedUrl)
+        {
+            var base62Converter = new Base62Converter();
+            return base62Converter.Encode(hashedUrl);
         }
 
         /// <summary>
