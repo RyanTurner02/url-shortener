@@ -8,17 +8,12 @@ namespace Url.Shortener.Features.ShortUrls.Create
     public static class CreateShortUrlEndpoint
     {
         /// <summary>
-        /// The route.
-        /// </summary>
-        private const string ROUTE = "/api/create";
-
-        /// <summary>
         /// Registers the endpoint for creating shortened URLs.
         /// </summary>
         /// <param name="app">The web application.</param>
         public static void RegisterCreateShortUrlEndpoint(this WebApplication app)
         {
-            app.MapPost(ROUTE, CreateShortUrl)
+            app.MapPost("/", CreateShortUrl)
                 .WithTags("Create Short URL")
                 .WithSummary("Creates a shortened URL from a URL.")
                 .Produces(StatusCodes.Status201Created);
@@ -32,10 +27,13 @@ namespace Url.Shortener.Features.ShortUrls.Create
         /// <returns>The status of creating the short URL.</returns>
         private static async Task<IResult> CreateShortUrl(
             CreateShortUrlCommand createShortUrlCommand,
-            ISender sender)
+            ISender sender,
+            HttpRequest req)
         {
-            var shortUrl = await sender.Send(createShortUrlCommand);
-            return TypedResults.Created(ROUTE, new ShortUrlResponse(shortUrl));
+            var shortUrlHash = await sender.Send(createShortUrlCommand);    
+            var fullUrl = $"{req.Scheme}://{req.Host}{req.Path}{shortUrlHash}";
+
+            return TypedResults.Created(req.Path, new ShortUrlResponse(fullUrl));
         }
     }
 }
