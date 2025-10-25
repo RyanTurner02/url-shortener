@@ -66,7 +66,16 @@ namespace Url.Shortener.Features.ShortUrls.Create
         /// <returns>Random characters from the hashed url.</returns>
         private string GetRandomCharacters(int length, string hashedUrl)
         {
-            return string.Empty;
+            var shortUrl = new StringBuilder();
+            var random = new Random();
+
+            while (shortUrl.Length < length)
+            {
+                var index = random.Next(hashedUrl.Length);
+                shortUrl.Append(hashedUrl[index]);
+            }
+
+            return shortUrl.ToString();
         }
     }
 }
