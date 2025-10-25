@@ -1,6 +1,4 @@
-﻿using Base62;
-using System.Security.Cryptography;
-using System.Text;
+﻿using Url.Shortener.Features.ShortUrls.Create.Infrastructure;
 
 namespace Url.Shortener.Features.ShortUrls.Create
 {
@@ -9,6 +7,37 @@ namespace Url.Shortener.Features.ShortUrls.Create
     /// </summary>
     public class UrlShortenerService : IUrlShortenerService
     {
+        /// <summary>
+        /// The URL Hasher.
+        /// </summary>
+        private readonly IUrlHasher _urlHasher;
+
+        /// <summary>
+        /// The URL Encoder.
+        /// </summary>
+        private readonly IUrlEncoder _urlEncoder;
+
+        /// <summary>
+        /// The URL Randomizer.
+        /// </summary>
+        private readonly IUrlRandomizer _urlRandomizer;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="urlHasher">The URL Hasher.</param>
+        /// <param name="urlEncoder">The URL Encoder.</param>
+        /// <param name="urlRandomizer">The URL Randomizer.</param>
+        public UrlShortenerService(
+            IUrlHasher urlHasher,
+            IUrlEncoder urlEncoder,
+            IUrlRandomizer urlRandomizer)
+        {
+            _urlHasher = urlHasher;
+            _urlEncoder = urlEncoder;
+            _urlRandomizer = urlRandomizer;
+        }
+
         /// <inheritdoc/>
         public string ShortenUrl(string originalUrl)
         {
@@ -17,65 +46,11 @@ namespace Url.Shortener.Features.ShortUrls.Create
                 return string.Empty;
             }
 
-            var hashedUrl = HashUrl(originalUrl);
-            var encodedUrl = EncodeUrl(hashedUrl);
+            var hashedUrl = _urlHasher.Hash(originalUrl);
+            var encodedUrl = _urlEncoder.Encode(hashedUrl);
 
             var shortUrlLength = 7;
-            return GetRandomCharacters(shortUrlLength, encodedUrl);
-        }
-
-        /// <summary>
-        /// Hashes the original using the SHA-256 hash function.
-        /// </summary>
-        /// <param name="originalUrl">The original url.</param>
-        /// <returns>The SHA-256 hash of the original url.</returns>
-        private string HashUrl(string originalUrl)
-        {
-            StringBuilder hashedUrl = new StringBuilder();
-
-            using (var sha256 = SHA256.Create())
-            {
-                var input = Encoding.UTF8.GetBytes(originalUrl);
-                var bytes = sha256.ComputeHash(input);
-
-                foreach (var currentByte in bytes)
-                {
-                    hashedUrl.Append(currentByte.ToString("x2"));
-                }
-            }
-
-            return hashedUrl.ToString();
-        }
-
-        /// <summary>
-        /// Encodes the hashed url using Base62.
-        /// </summary>
-        /// <param name="hashedUrl">The url.</param>
-        /// <returns>The Base62 encoding of the hashed url.</returns>
-        private string EncodeUrl(string hashedUrl)
-        {
-            var base62Converter = new Base62Converter();
-            return base62Converter.Encode(hashedUrl);
-        }
-
-        /// <summary>
-        /// Retrieves a fixed length of random characters from the hashed url.
-        /// </summary>
-        /// <param name="length">The length of the </param>
-        /// <param name="hashedUrl">The hashed url.</param>
-        /// <returns>Random characters from the hashed url.</returns>
-        private string GetRandomCharacters(int length, string hashedUrl)
-        {
-            var shortUrl = new StringBuilder();
-            var random = new Random();
-
-            while (shortUrl.Length < length)
-            {
-                var index = random.Next(hashedUrl.Length);
-                shortUrl.Append(hashedUrl[index]);
-            }
-
-            return shortUrl.ToString();
+            return _urlRandomizer.Randomize(shortUrlLength, encodedUrl);
         }
     }
 }
