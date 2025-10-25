@@ -13,6 +13,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
+builder.Services.AddScoped<IUrlShortenerService, UrlShortenerService>();
 builder.Services.AddScoped<ICreateShortUrlRepository, CreateShortUrlRepository>();
 builder.Services.AddScoped<IGetShortUrlRepository, GetShortUrlRepository>();
 

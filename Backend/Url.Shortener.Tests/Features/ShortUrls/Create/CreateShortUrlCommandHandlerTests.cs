@@ -11,8 +11,9 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
         [InlineData("https://www.youtube.com/", "youtube.com/")]
         public async Task Handle_ReturnsShortenedUrl(string originalUrl, string shortenedUrl)
         {
+            var mockService = new Mock<IUrlShortenerService>();
             var mockRepository = new Mock<ICreateShortUrlRepository>();
-            var createShortUrlCommandHandler = new CreateShortUrlCommandHandler(mockRepository.Object);
+            var createShortUrlCommandHandler = new CreateShortUrlCommandHandler(mockService.Object, mockRepository.Object);
             var createShortUrlCommand = new CreateShortUrlCommand(originalUrl);
 
             var actual = await createShortUrlCommandHandler.Handle(createShortUrlCommand, CancellationToken.None);
