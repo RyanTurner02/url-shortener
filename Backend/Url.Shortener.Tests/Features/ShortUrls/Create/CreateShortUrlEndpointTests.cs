@@ -33,7 +33,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
 
             using var client = app.CreateClient();
 
-            var route = "/api/create";
+            var route = "/";
             var payload = new { url = "https://www.youtube.com" };
             var response = await client.PostAsJsonAsync(route, payload);
 

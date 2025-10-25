@@ -37,7 +37,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Get
 
             using var client = app.CreateClient();
 
-            var route = string.Format("/api/{0}", shortenedUrl);
+            var route = string.Format("/{0}", shortenedUrl);
             var response = await client.GetAsync(route);
 
             var expectedBody = new UrlResponse(originalUrl);
