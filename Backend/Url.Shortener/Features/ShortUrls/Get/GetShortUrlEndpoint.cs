@@ -13,7 +13,7 @@ namespace Url.Shortener.Features.ShortUrls.Get
         /// <param name="app">The web application.</param>
         public static void RegisterGetShortUrlEndpoint(this WebApplication app)
         {
-            app.MapGet("/api/{shortUrl}", GetShortUrl)
+            app.MapGet("/{shortUrl}", GetShortUrl)
                 .WithTags("Get Short URL")
                 .WithSummary("Retrieves the original URL from a short URL.")
                 .Produces(StatusCodes.Status200OK)

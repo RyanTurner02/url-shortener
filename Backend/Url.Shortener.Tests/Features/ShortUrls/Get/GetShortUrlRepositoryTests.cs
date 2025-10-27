@@ -10,14 +10,14 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Get
         [Fact]
         public async Task GetShortUrl_ReturnsShortUrlObject()
         {
-            var originalUrl = "https://youtube.com";
-            var shortenedUrl = "youtube.com";
+            var originalUrl = "https://example.com/";
+            var shortenedUrlHash = "LliXArW";
 
             var expected = new ShortUrl
             {
                 Id = 1,
                 OriginalUrl = originalUrl,
-                ShortenedUrl = shortenedUrl,
+                ShortenedUrl = shortenedUrlHash,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -31,7 +31,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Get
             var getShortUrlRepository = new GetShortUrlRepository(shortUrlDbContext);
             await createShortUrlRepository.AddShortUrl(expected);
 
-            var actual = await getShortUrlRepository.GetShortUrl(shortenedUrl);
+            var actual = await getShortUrlRepository.GetShortUrl(shortenedUrlHash);
 
             Assert.Equal(expected, actual);
         }

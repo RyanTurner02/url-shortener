@@ -12,11 +12,18 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
         [Fact]
         public async Task CreateShortUrl_ReturnsCreated()
         {
+            var originalUrl = "https://example.com/";
+
+            var hash = "LliXArW";
+            var shortenedUrl = $"http://localhost/{hash}";
+
             var senderMock = new Mock<ISender>();
 
             senderMock.Setup(s =>
-                s.Send(It.IsAny<CreateShortUrlCommand>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync("youtube.com");
+                s.Send(
+                    It.IsAny<CreateShortUrlCommand>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(hash);
 
             await using var app =
                 new WebApplicationFactory<Program>()
@@ -33,20 +40,23 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
 
             using var client = app.CreateClient();
 
-            var route = "/api/create";
-            var payload = new { url = "https://www.youtube.com" };
+            var route = "/";
+            var payload = new { url = originalUrl };
             var response = await client.PostAsJsonAsync(route, payload);
 
-            var expectedBody = new ShortUrlResponse("youtube.com");
+            var expectedBody = new ShortUrlResponse(shortenedUrl);
             var body = await response.Content.ReadFromJsonAsync<ShortUrlResponse>();
 
             Assert.True(response.IsSuccessStatusCode);
             Assert.Equal(expectedBody, body);
             Assert.Equal(route, response.Headers.Location?.OriginalString);
 
-            senderMock.Verify(s => s.Send(
-                It.Is<CreateShortUrlCommand>(c => c.Url == "https://www.youtube.com"),
-                It.IsAny<CancellationToken>()), Times.Once);
+            senderMock.Verify(
+                s => s.Send(
+                    It.Is<CreateShortUrlCommand>(
+                        c => c.Url == originalUrl),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
         }
     }
 }
