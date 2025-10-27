@@ -12,13 +12,23 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
         public async Task Handle_ReturnsShortenedUrl(string originalUrl, string shortenedUrl)
         {
             var mockService = new Mock<IUrlShortenerService>();
+            mockService.Setup(x => x.ShortenUrl(It.IsAny<string>())).Returns(shortenedUrl);
+            
             var mockRepository = new Mock<ICreateShortUrlRepository>();
+
             var createShortUrlCommandHandler = new CreateShortUrlCommandHandler(mockService.Object, mockRepository.Object);
             var createShortUrlCommand = new CreateShortUrlCommand(originalUrl);
 
             var actual = await createShortUrlCommandHandler.Handle(createShortUrlCommand, CancellationToken.None);
 
             Assert.Equal(shortenedUrl, actual);
+
+            mockService.Verify(
+                x => x.ShortenUrl(
+                    It.Is<string>(
+                        y => y == originalUrl)),
+                Times.Once);
+
             mockRepository.Verify(
                 x => x.AddShortUrl(
                     It.Is<ShortUrl>(
