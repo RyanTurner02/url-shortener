@@ -12,7 +12,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
         [Fact]
         public async Task CreateShortUrl_ReturnsCreated()
         {
-            var originalUrl = "https://example.com";
+            var originalUrl = "https://example.com/";
 
             var hash = "LliXArW";
             var shortenedUrl = $"http://localhost/{hash}";

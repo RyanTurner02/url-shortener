@@ -9,16 +9,17 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Get
 {
     public sealed class GetShortUrlEndpointTests
     {
-        [Theory]
-        [InlineData("https://google.com", "google.com")]
-        [InlineData("https://youtube.com", "youtube.com")]
-        public async Task GetShortUrl_ReturnsOk(string originalUrl, string shortenedUrl)
+        [Fact]
+        public async Task GetShortUrl_ReturnsOk()
         {
+            var originalUrl = "https://example.com/";
+            var shortenedUrlHash = "LliXArW";
+
             var senderMock = new Mock<ISender>();
 
             senderMock.Setup(s =>
                 s.Send(
-                    It.Is<GetShortUrlQuery>(q => q.ShortUrl == shortenedUrl),
+                    It.Is<GetShortUrlQuery>(q => q.ShortUrl == shortenedUrlHash),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(originalUrl);
 
@@ -37,7 +38,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Get
 
             using var client = app.CreateClient();
 
-            var route = string.Format("/{0}", shortenedUrl);
+            var route = string.Format("/{0}", shortenedUrlHash);
             var response = await client.GetAsync(route);
 
             var expectedBody = new UrlResponse(originalUrl);
@@ -47,7 +48,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Get
             Assert.Equal(expectedBody, body);
 
             senderMock.Verify(s => s.Send(
-                It.Is<GetShortUrlQuery>(c => c.ShortUrl == shortenedUrl),
+                It.Is<GetShortUrlQuery>(c => c.ShortUrl == shortenedUrlHash),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
     }

@@ -19,8 +19,8 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
 
             var shortUrl = new ShortUrl
             {
-                OriginalUrl = "OriginalUrl",
-                ShortenedUrl = "ShortenedUrl",
+                OriginalUrl = "https://example.com/",
+                ShortenedUrl = "LliXArW",
             };
 
             var expected = 1;

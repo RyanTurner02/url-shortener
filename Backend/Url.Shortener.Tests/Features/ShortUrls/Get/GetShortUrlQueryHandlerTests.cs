@@ -6,16 +6,17 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Get
 {
     public sealed class GetShortUrlQueryHandlerTests
     {
-        [Theory]
-        [InlineData("https://google.com", "google.com")]
-        [InlineData("https://youtube.com", "youtube.com")]
-        public async Task Handle_ReturnsOriginalUrl(string originalUrl, string shortenedUrl)
+        [Fact]
+        public async Task Handle_ReturnsOriginalUrl()
         {
+            var originalUrl = "https://example.com/";
+            var shortenedUrlHash = "LliXArW";
+
             var shortUrl = new ShortUrl
             {
                 Id = 1,
                 OriginalUrl = originalUrl,
-                ShortenedUrl = shortenedUrl,
+                ShortenedUrl = shortenedUrlHash,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -25,12 +26,12 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Get
                 .ReturnsAsync(shortUrl);
 
             var getShortUrlQueryHandler = new GetShortUrlQueryHandler(mockRepository.Object);
-            var getShortUrlQuery = new GetShortUrlQuery(shortenedUrl);
+            var getShortUrlQuery = new GetShortUrlQuery(shortenedUrlHash);
 
             var actual = await getShortUrlQueryHandler.Handle(getShortUrlQuery, CancellationToken.None);
 
             Assert.Equal(originalUrl, actual);
-            mockRepository.Verify(x => x.GetShortUrl(It.Is<string>(y => y == shortenedUrl)), Times.Once);
+            mockRepository.Verify(x => x.GetShortUrl(It.Is<string>(y => y == shortenedUrlHash)), Times.Once);
         }
     }
 }
