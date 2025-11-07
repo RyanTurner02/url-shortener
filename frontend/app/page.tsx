@@ -14,8 +14,14 @@ export default function Home() {
               <Input id="url" type="text" placeholder="https://example.com/long-url-here" />
             </Field>
           </FieldGroup>
+          <Button className="cursor-pointer" variant="outline">Submit</Button>
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="shortened-url">Shortened URL</FieldLabel>
+              <Input className="text-red-500" id="shortened-url" type="text" placeholder="https://url-shortener-example.com/shortened-url" readOnly />
+            </Field>
+          </FieldGroup>
         </FieldSet>
-        <Button className="cursor-pointer" variant="outline">Submit</Button>
       </main>
     </div>
   );
