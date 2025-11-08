@@ -1,37 +1,92 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+
+const formSchema = z.object({
+  originalUrl: z.url(),
+  shortenedUrl: z.string().optional(),
+});
 
 export const UrlShortenerForm = () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      originalUrl: "",
+      shortenedUrl: "",
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data);
+  };
+
   return (
-    <div className="p-10">
+    <form
+      className="p-10"
+      id="url-shortener-form"
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
       <FieldSet>
         <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="url">Paste your long link here</FieldLabel>
-            <Input
-              id="url"
-              type="text"
-              placeholder="https://example.com/long-url-here"
-            />
-          </Field>
+          <Controller
+            name="originalUrl"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="original-url">
+                  Paste your long link here
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="original-url"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="https://example.com/long-url-here"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
         </FieldGroup>
-        <Button className="cursor-pointer" variant="outline">
+        <Button
+          className="cursor-pointer"
+          type="submit"
+          form="url-shortener-form"
+        >
           Submit
         </Button>
         <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="shortened-url">Shortened URL</FieldLabel>
-            <Input
-              className="text-red-500"
-              id="shortened-url"
-              type="text"
-              placeholder="https://url-shortener-example.com/shortened-url"
-              readOnly
-            />
-          </Field>
+          <Controller
+            name="shortenedUrl"
+            control={form.control}
+            render={({ field }) => (
+              <Field>
+                <FieldLabel htmlFor="shortened-url">Shortened URL</FieldLabel>
+                <Input
+                  {...field}
+                  className="text-red-500"
+                  id="shortened-url"
+                  type="text"
+                  placeholder="https://url-shortener-example.com/shortened-url"
+                  readOnly
+                />
+              </Field>
+            )}
+          />
         </FieldGroup>
       </FieldSet>
-    </div>
+    </form>
   );
 };
