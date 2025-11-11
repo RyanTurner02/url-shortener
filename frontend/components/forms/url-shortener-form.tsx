@@ -87,7 +87,6 @@ export const UrlShortenerForm = () => {
                 <FieldLabel htmlFor="shortened-url">Shortened URL</FieldLabel>
                 <Input
                   {...field}
-                  className="text-red-500"
                   id="shortened-url"
                   type="text"
                   placeholder="https://url-shortener-example.com/shortened-url"
