@@ -9,9 +9,14 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import useCreateShortenedUrl from "@/hooks/use-create-shortened-url";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
+
+interface ShortUrlResponse {
+  shortUrl: string;
+}
 
 const formSchema = z.object({
   originalUrl: z.url(),
@@ -27,8 +32,14 @@ export const UrlShortenerForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+  const createShortUrlMutation = useCreateShortenedUrl();
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    const result: ShortUrlResponse = await createShortUrlMutation(data.originalUrl);
+
+    if (result) {
+      form.setValue("shortenedUrl", result.shortUrl);
+    }
   };
 
   return (

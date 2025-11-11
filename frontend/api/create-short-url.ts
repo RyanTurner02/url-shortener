@@ -6,16 +6,13 @@ import axios from "axios";
  * @param url - The URL to shorten.
  */
 export const createShortUrl = async (url: string) => {
-    try {
-        const response = await axios({
-            method: "post",
-            url: "http://localhost:5000/",
-            data: {
-                Url: url
-            }
-        });
-        console.log(response);
-    } catch (error) {
-        console.log(error);
-    }
+    const response = await axios({
+        method: "post",
+        url: "http://localhost:5000/",
+        data: {
+            Url: url
+        }
+    });
+
+    return response.data;
 }
