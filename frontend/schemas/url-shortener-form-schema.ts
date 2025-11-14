@@ -6,3 +6,8 @@ export const urlShortenerFormSchema = z.object({
 });
 
 export type UrlShortenerFormValues = z.infer<typeof urlShortenerFormSchema>;
+
+export const defaultUrlShortenerFormValues: UrlShortenerFormValues = {
+  originalUrl: "",
+  shortenedUrl: "",
+};

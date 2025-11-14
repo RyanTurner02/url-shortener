@@ -1,5 +1,6 @@
 import useCreateShortenedUrl from "@/hooks/use-create-shortened-url";
 import {
+  defaultUrlShortenerFormValues,
   urlShortenerFormSchema,
   UrlShortenerFormValues,
 } from "@/schemas/url-shortener-form-schema";
@@ -10,10 +11,7 @@ import { useForm } from "react-hook-form";
 export default function useUrlShortenerForm() {
   const form = useForm<UrlShortenerFormValues>({
     resolver: zodResolver(urlShortenerFormSchema),
-    defaultValues: {
-      originalUrl: "",
-      shortenedUrl: "",
-    },
+    defaultValues: defaultUrlShortenerFormValues,
   });
 
   const createShortUrlMutation = useCreateShortenedUrl();
