@@ -8,4 +8,10 @@ describe("createShortUrl", () => {
             ShortUrl: "http://localhost:5000/ShortUrl"
         });
     });
+
+    it("returns null on failure", async () => {
+        const response = await createShortUrl("error");
+        
+        expect(response).toBeNull();
+    });
 });
