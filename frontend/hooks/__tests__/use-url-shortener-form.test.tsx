@@ -8,7 +8,7 @@ vi.mock("@/hooks/use-create-shortened-url", () => ({
   default: () => mockCreateShortUrl,
 }));
 
-describe("useCreateShortenedUrl", () => {
+describe("useUrlShortenerForm", () => {
   beforeEach(() => {
     mockCreateShortUrl.mockReset();
   });
