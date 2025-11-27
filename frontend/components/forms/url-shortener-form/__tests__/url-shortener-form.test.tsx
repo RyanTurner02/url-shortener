@@ -34,4 +34,24 @@ describe("UrlShortenerForm", () => {
     expect(error).toBeInTheDocument();
     expect(error).toHaveTextContent("Invalid URL");
   });
+
+  it("removes the field error after typing a valid original url", async () => {
+    const user = userEvent.setup();
+    render(
+        <QueryProviderWrapper>
+            <UrlShortenerForm />
+        </QueryProviderWrapper>
+    );
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    const error = screen.getByRole("alert");
+    expect(error).toBeInTheDocument();
+
+    const [originalUrlField] = screen.getAllByRole("textbox");
+    await user.type(originalUrlField, "https://example.com/");
+    await user.click(button);
+    expect(error).not.toBeInTheDocument();
+  });
 });
