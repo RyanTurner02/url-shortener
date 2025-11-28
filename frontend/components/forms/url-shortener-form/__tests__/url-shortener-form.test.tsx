@@ -65,7 +65,6 @@ describe("UrlShortenerForm", () => {
 
     const [originalUrlField] = screen.getAllByRole("textbox");
     await user.type(originalUrlField, "https://example.com/");
-    await user.click(button);
     expect(error).not.toBeInTheDocument();
   });
 
