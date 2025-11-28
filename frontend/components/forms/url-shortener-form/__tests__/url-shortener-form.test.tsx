@@ -3,7 +3,21 @@ import { UrlShortenerForm } from "@/components/forms/url-shortener-form/url-shor
 import { QueryProviderWrapper } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
 
+vi.mock("@/hooks/use-create-shortened-url", () => {
+  return {
+    default: () => {
+      return async (originalUrl: string) => {
+        return { shortUrl: "ShortUrl" };
+      };
+    },
+  };
+});
+
 describe("UrlShortenerForm", () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("renders the fields and submit button", () => {
     render(
       <QueryProviderWrapper>
@@ -53,5 +67,23 @@ describe("UrlShortenerForm", () => {
     await user.type(originalUrlField, "https://example.com/");
     await user.click(button);
     expect(error).not.toBeInTheDocument();
+  });
+
+  it("displays a short url after submitting a valid original url", async () => {
+    const user = userEvent.setup();
+    render(
+        <QueryProviderWrapper>
+            <UrlShortenerForm />
+        </QueryProviderWrapper>
+    );
+
+    const button = screen.getByRole("button");
+    const [originalUrlField, shortUrlField] = screen.getAllByRole("textbox");
+    expect(shortUrlField).toHaveValue("");
+
+    await user.type(originalUrlField, "https://example.com/");
+    await user.click(button);
+
+    expect(shortUrlField).toHaveValue("ShortUrl");
   });
 });
