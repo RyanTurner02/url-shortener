@@ -2,10 +2,6 @@ import { render, screen } from "@testing-library/react";
 import Home from "@/app/page";
 import { QueryProviderWrapper } from "@/test-utils";
 
-vi.mock("@/components/forms/url-shortener-form/url-shortener-form", () => ({
-  UrlShortenerForm: () => <div data-testid="url-shortener-form" />,
-}));
-
 describe("Home", () => {
   it("renders the header", () => {
     render(
@@ -27,7 +23,8 @@ describe("Home", () => {
       </QueryProviderWrapper>
     );
 
-    const form = screen.getByTestId("url-shortener-form");
+    const input = screen.getByText(/paste your long link here/i);
+    const form = input.closest("form");
 
     expect(form).toBeInTheDocument();
   });
