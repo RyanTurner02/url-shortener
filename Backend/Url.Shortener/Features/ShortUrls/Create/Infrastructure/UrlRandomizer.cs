@@ -5,10 +5,15 @@ namespace Url.Shortener.Features.ShortUrls.Create.Infrastructure
     /// <summary>
     /// The URL randomizer class.
     /// </summary>
-    public class UrlRandomizer : IUrlRandomizer
+    public static class UrlRandomizer
     {
-        /// <inheritdoc/>
-        public string Randomize(int length, string hashedUrl)
+        /// <summary>
+        /// Retrieves a fixed length of random characters from the hashed url.
+        /// </summary>
+        /// <param name="length">The length of the </param>
+        /// <param name="hashedUrl">The hashed url.</param>
+        /// <returns>Random characters from the hashed url.</returns>
+        public static string Randomize(int length, string hashedUrl)
         {
             var shortUrl = new StringBuilder();
             var random = new Random();

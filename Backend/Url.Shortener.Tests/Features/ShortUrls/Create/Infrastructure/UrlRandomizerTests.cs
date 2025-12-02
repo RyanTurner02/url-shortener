@@ -10,8 +10,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create.Infrastructure
             var urlLength = 7;
             var encodedUrl = "BEiD8U92IoYW2ofPhe7GyEBLStEfKccm3G75JyiilanAt8FcsIwpKYWhB2HAZ8CMpN8gZlo5XXHPlYG0HyRslr";
 
-            var urlRandomizer = new UrlRandomizer();
-            var actual = urlRandomizer.Randomize(urlLength, encodedUrl);
+            var actual = UrlRandomizer.Randomize(urlLength, encodedUrl);
 
             Assert.False(string.IsNullOrEmpty(actual));
             Assert.Equal(urlLength, actual.Length);

@@ -6,10 +6,14 @@ namespace Url.Shortener.Features.ShortUrls.Create.Infrastructure
     /// <summary>
     /// The URL hasher class.
     /// </summary>
-    public class UrlHasher : IUrlHasher
+    public static class UrlHasher
     {
-        /// <inheritdoc/>
-        public string Hash(string originalUrl)
+        /// <summary>
+        /// Hashes the original URL using the SHA-256 hash function.
+        /// </summary>
+        /// <param name="originalUrl">The original URL.</param>
+        /// <returns>The SHA-256 hash of the original URL.</returns>
+        public static string Hash(string originalUrl)
         {
             StringBuilder hashedUrl = new StringBuilder();
 
