@@ -1,4 +1,4 @@
-﻿using Url.Shortener.Features.ShortUrls.Create.Infrastructure;
+﻿using Url.Shortener.Features.ShortUrls.Create.Utilities;
 
 namespace Url.Shortener.Features.ShortUrls.Create
 {

@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Url.Shortener.Features.ShortUrls.Create.Infrastructure
+namespace Url.Shortener.Features.ShortUrls.Create.Utilities
 {
     /// <summary>
     /// The URL hasher class.

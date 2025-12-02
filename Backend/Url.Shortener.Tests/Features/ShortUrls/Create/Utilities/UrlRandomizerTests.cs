@@ -1,6 +1,6 @@
-﻿using Url.Shortener.Features.ShortUrls.Create.Infrastructure;
+﻿using Url.Shortener.Features.ShortUrls.Create.Utilities;
 
-namespace Url.Shortener.Tests.Features.ShortUrls.Create.Infrastructure
+namespace Url.Shortener.Tests.Features.ShortUrls.Create.Utilities
 {
     public sealed class UrlRandomizerTests
     {

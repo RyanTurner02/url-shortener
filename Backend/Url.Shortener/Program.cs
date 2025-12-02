@@ -3,7 +3,6 @@ using Url.Shortener.Features.ShortUrls.Create;
 using Url.Shortener.Features.ShortUrls.Get;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using Url.Shortener.Features.ShortUrls.Create.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
