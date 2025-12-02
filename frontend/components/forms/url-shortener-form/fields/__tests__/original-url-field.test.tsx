@@ -17,7 +17,7 @@ describe("OriginalUrlField", () => {
     const user = userEvent.setup();
     render(<Wrapper />);
 
-    const label = screen.getByLabelText(labelRegex);
+    const label = screen.getByText(labelRegex);
     expect(label).toBeInTheDocument();
 
     const input = screen.getByRole("textbox", { name: labelRegex });
