@@ -1,22 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import Home from "@/app/page";
-import QueryProvider from "@/providers/query-provider";
+import { QueryProviderWrapper } from "@/test-utils";
 
 vi.mock("@/components/forms/url-shortener-form/url-shortener-form", () => ({
   UrlShortenerForm: () => <div data-testid="url-shortener-form" />,
 }));
 
-const Wrapper = () => {
-  return (
-    <QueryProvider>
-      <Home />
-    </QueryProvider>
-  );
-};
-
 describe("Home", () => {
   it("renders the header", () => {
-    render(<Wrapper />);
+    render(
+      <QueryProviderWrapper>
+        <Home />
+      </QueryProviderWrapper>
+    );
 
     const header = screen.getByRole("heading", { level: 1 });
 
@@ -25,7 +21,11 @@ describe("Home", () => {
   });
 
   it("renders the url shortener form", () => {
-    render(<Wrapper />);
+    render(
+      <QueryProviderWrapper>
+        <Home />
+      </QueryProviderWrapper>
+    );
 
     const form = screen.getByTestId("url-shortener-form");
 
