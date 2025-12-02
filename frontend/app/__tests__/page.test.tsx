@@ -23,8 +23,8 @@ describe("Home", () => {
       </QueryProviderWrapper>
     );
 
-    const input = screen.getByText(/paste your long link here/i);
-    const form = input.closest("form");
+    const label = screen.getByText(/paste your long link here/i);
+    const form = label.closest("form");
 
     expect(form).toBeInTheDocument();
   });
