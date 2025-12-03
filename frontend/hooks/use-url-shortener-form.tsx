@@ -4,7 +4,7 @@ import {
   urlShortenerFormSchema,
   UrlShortenerFormValues,
 } from "@/schemas/url-shortener-form-schema";
-import { IShortUrlResponse } from "@/types/url-shortener-types";
+import { IShortUrlResponse } from "@/responses/short-url-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
