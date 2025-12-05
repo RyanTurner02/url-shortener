@@ -1,4 +1,4 @@
-import { ICreateShortUrlRequest } from "@/requests/create-short-url-response";
+import { ICreateShortUrlRequest } from "@/requests/create-short-url-request";
 import { http, HttpResponse } from "msw";
 
 export const handlers = [
