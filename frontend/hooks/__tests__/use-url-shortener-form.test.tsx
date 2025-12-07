@@ -45,4 +45,27 @@ describe("useUrlShortenerForm", () => {
 
     expect(form.getValues().shortenedUrl).toBe("ShortUrl");
   });
+
+  it("does not resubmit the same original url", async () => {
+    mockCreateShortUrl.mockResolvedValue({ shortUrl: "ShortUrl" });
+
+    const exampleUrl = "https://example.com";
+    const { result } = renderHook(() => useUrlShortenerForm(), {
+      wrapper: QueryProviderWrapper,
+    });
+    const { form, onSubmit } = result.current;
+
+    await act(async () => {
+      await onSubmit({ originalUrl: exampleUrl });
+    });
+
+    await act(async () => {
+      await onSubmit({ originalUrl: exampleUrl })
+    })
+
+    expect(mockCreateShortUrl).toHaveBeenCalledWith(exampleUrl);
+    expect(mockCreateShortUrl).toHaveBeenCalledOnce();
+
+    expect(form.getValues().shortenedUrl).toBe("ShortUrl");
+  });
 });
