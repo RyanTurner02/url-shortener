@@ -18,16 +18,24 @@ namespace Url.Shortener.Features.ShortUrls.Create
         private readonly ICreateShortUrlRepository _createShortUrlRepository;
 
         /// <summary>
-        /// Constructor
+        /// The original URL repository.
+        /// </summary>
+        private readonly IOriginalUrlRepository _originalUrlRepository;
+
+        /// <summary>
+        /// Constructor.
         /// </summary>
         /// <param name="urlShortenerService">The url shortener service.</param>
         /// <param name="createShortUrlRepository">The create short URL repository.</param>
+        /// <param name="originalUrlRepository">The original URL repository.</param>
         public CreateShortUrlCommandHandler(
             IUrlShortenerService urlShortenerService,
-            ICreateShortUrlRepository createShortUrlRepository)
+            ICreateShortUrlRepository createShortUrlRepository,
+            IOriginalUrlRepository originalUrlRepository)
         {
             _urlShortenerService = urlShortenerService;
             _createShortUrlRepository = createShortUrlRepository;
+            _originalUrlRepository = originalUrlRepository;
         }
 
         /// <summary>
@@ -38,6 +46,12 @@ namespace Url.Shortener.Features.ShortUrls.Create
         /// <returns>The shortened URL.</returns>
         public async Task<string> Handle(CreateShortUrlCommand request, CancellationToken cancellationToken)
         {
+            var originalUrlDb = await _originalUrlRepository.GetShortUrl(request.Url);
+            if (!string.IsNullOrEmpty(originalUrlDb))
+            {
+                return originalUrlDb;
+            }
+
             var shortUrl = new ShortUrl
             {
                 OriginalUrl = request.Url,

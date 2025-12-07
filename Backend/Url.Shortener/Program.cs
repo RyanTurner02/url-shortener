@@ -16,6 +16,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 builder.Services.AddScoped<IUrlShortenerService, UrlShortenerService>();
 builder.Services.AddScoped<ICreateShortUrlRepository, CreateShortUrlRepository>();
 builder.Services.AddScoped<IGetShortUrlRepository, GetShortUrlRepository>();
+builder.Services.AddScoped<IOriginalUrlRepository, OriginalUrlRepository>();
 
 builder.Services.AddCors(options =>
 {
