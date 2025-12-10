@@ -3,6 +3,7 @@ using Url.Shortener.Features.ShortUrls.Create;
 using Url.Shortener.Features.ShortUrls.Get;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Url.Shortener.Features.ShortUrls.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +15,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddScoped<IUrlShortenerService, UrlShortenerService>();
-builder.Services.AddScoped<ICreateShortUrlRepository, CreateShortUrlRepository>();
-builder.Services.AddScoped<IGetShortUrlRepository, GetShortUrlRepository>();
-builder.Services.AddScoped<IOriginalUrlRepository, OriginalUrlRepository>();
+builder.Services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
 
 builder.Services.AddCors(options =>
 {

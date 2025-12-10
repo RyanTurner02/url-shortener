@@ -1,6 +1,7 @@
 ﻿using Url.Shortener.Features.ShortUrls;
 using Url.Shortener.Features.ShortUrls.Create;
 using Moq;
+using Url.Shortener.Features.ShortUrls.Common;
 
 namespace Url.Shortener.Tests.Features.ShortUrls.Create
 {
@@ -14,15 +15,12 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
 
             var mockUrlShortenerService = new Mock<IUrlShortenerService>();
 
-            var mockCreateShortUrlRepository = new Mock<ICreateShortUrlRepository>();
-
-            var mockOriginalUrlRepository = new Mock<IOriginalUrlRepository>();
-            mockOriginalUrlRepository.Setup(x => x.GetShortUrl(It.IsAny<string>())).ReturnsAsync(hash);
+            var mockShortUrlRepository = new Mock<IShortUrlRepository>();
+            mockShortUrlRepository.Setup(x => x.GetShortUrl(It.IsAny<string>())).ReturnsAsync(hash);
 
             var createShortUrlCommandHandler = new CreateShortUrlCommandHandler(
                 mockUrlShortenerService.Object,
-                mockCreateShortUrlRepository.Object,
-                mockOriginalUrlRepository.Object);
+                mockShortUrlRepository.Object);
             var createShortUrlCommand = new CreateShortUrlCommand(originalUrl);
 
             var actual = await createShortUrlCommandHandler.Handle(createShortUrlCommand, CancellationToken.None);
@@ -34,12 +32,12 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
                     It.IsAny<string>()),
                 Times.Never);
 
-            mockCreateShortUrlRepository.Verify(
+            mockShortUrlRepository.Verify(
                 x => x.AddShortUrl(
                     It.IsAny<ShortUrl>()),
                 Times.Never);
 
-            mockOriginalUrlRepository.Verify(
+            mockShortUrlRepository.Verify(
                 x => x.GetShortUrl(
                     It.Is<string>(
                         y => y == originalUrl)),
@@ -55,13 +53,11 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
             var mockUrlShortenerService = new Mock<IUrlShortenerService>();
             mockUrlShortenerService.Setup(x => x.ShortenUrl(It.IsAny<string>())).Returns(shortenedUrlHash);
             
-            var mockCreateShortUrlRepositoryRepository = new Mock<ICreateShortUrlRepository>();
-            var mockOriginalUrlRepository = new Mock<IOriginalUrlRepository>();
+            var mockShortUrlRepository = new Mock<IShortUrlRepository>();
 
             var createShortUrlCommandHandler = new CreateShortUrlCommandHandler(
                 mockUrlShortenerService.Object,
-                mockCreateShortUrlRepositoryRepository.Object,
-                mockOriginalUrlRepository.Object);
+                mockShortUrlRepository.Object);
             var createShortUrlCommand = new CreateShortUrlCommand(originalUrl);
 
             var actual = await createShortUrlCommandHandler.Handle(createShortUrlCommand, CancellationToken.None);
@@ -74,14 +70,14 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
                         y => y == originalUrl)),
                 Times.Once);
 
-            mockCreateShortUrlRepositoryRepository.Verify(
+            mockShortUrlRepository.Verify(
                 x => x.AddShortUrl(
                     It.Is<ShortUrl>(
                         y => y.OriginalUrl == originalUrl &&
                         y.ShortenedUrl == shortenedUrlHash)),
                 Times.Once);
 
-            mockOriginalUrlRepository.Verify(
+            mockShortUrlRepository.Verify(
                 x => x.GetShortUrl(
                     It.Is<string>(
                         y => y == originalUrl)),

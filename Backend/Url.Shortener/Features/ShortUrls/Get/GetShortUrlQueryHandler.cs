@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Url.Shortener.Features.ShortUrls.Common;
 
 namespace Url.Shortener.Features.ShortUrls.Get
 {
@@ -8,17 +9,17 @@ namespace Url.Shortener.Features.ShortUrls.Get
     public class GetShortUrlQueryHandler : IRequestHandler<GetShortUrlQuery, string?>
     {
         /// <summary>
-        /// The get short URL repository.
+        /// The short URL repository.
         /// </summary>
-        private readonly IGetShortUrlRepository _getShortUrlRepository;
+        private readonly IShortUrlRepository _shortUrlRepository;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="getShortUrlRepository">The get short URL repository.</param>
-        public GetShortUrlQueryHandler(IGetShortUrlRepository getShortUrlRepository)
+        /// <param name="shortUrlRepository">The short URL repository.</param>
+        public GetShortUrlQueryHandler(IShortUrlRepository shortUrlRepository)
         {
-            _getShortUrlRepository = getShortUrlRepository;
+            _shortUrlRepository = shortUrlRepository;
         }
 
         /// <summary>
@@ -29,9 +30,7 @@ namespace Url.Shortener.Features.ShortUrls.Get
         /// <returns>The original URL</returns>
         public async Task<string?> Handle(GetShortUrlQuery request, CancellationToken cancellationToken)
         {
-            var shortUrl = await _getShortUrlRepository.GetShortUrl(request.ShortUrl);
-
-            return shortUrl?.OriginalUrl;
+            return await _shortUrlRepository.GetOriginalUrl(request.ShortUrl);
         }
     }
 }

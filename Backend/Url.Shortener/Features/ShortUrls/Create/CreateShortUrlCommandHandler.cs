@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Url.Shortener.Features.ShortUrls.Common;
 
 namespace Url.Shortener.Features.ShortUrls.Create
 {
@@ -13,29 +14,21 @@ namespace Url.Shortener.Features.ShortUrls.Create
         private readonly IUrlShortenerService _urlShortenerService;
 
         /// <summary>
-        /// The create short URL repository.
+        /// The short url repository.
         /// </summary>
-        private readonly ICreateShortUrlRepository _createShortUrlRepository;
-
-        /// <summary>
-        /// The original URL repository.
-        /// </summary>
-        private readonly IOriginalUrlRepository _originalUrlRepository;
+        private readonly IShortUrlRepository _shortUrlRepository;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="urlShortenerService">The url shortener service.</param>
-        /// <param name="createShortUrlRepository">The create short URL repository.</param>
-        /// <param name="originalUrlRepository">The original URL repository.</param>
+        /// <param name="shortUrlRepository">The short URL repository.</param>
         public CreateShortUrlCommandHandler(
             IUrlShortenerService urlShortenerService,
-            ICreateShortUrlRepository createShortUrlRepository,
-            IOriginalUrlRepository originalUrlRepository)
+            IShortUrlRepository shortUrlRepository)
         {
             _urlShortenerService = urlShortenerService;
-            _createShortUrlRepository = createShortUrlRepository;
-            _originalUrlRepository = originalUrlRepository;
+            _shortUrlRepository = shortUrlRepository;
         }
 
         /// <summary>
@@ -46,7 +39,7 @@ namespace Url.Shortener.Features.ShortUrls.Create
         /// <returns>The shortened URL.</returns>
         public async Task<string> Handle(CreateShortUrlCommand request, CancellationToken cancellationToken)
         {
-            var originalUrlDb = await _originalUrlRepository.GetShortUrl(request.Url);
+            var originalUrlDb = await _shortUrlRepository.GetShortUrl(request.Url);
             if (!string.IsNullOrEmpty(originalUrlDb))
             {
                 return originalUrlDb;
@@ -57,9 +50,7 @@ namespace Url.Shortener.Features.ShortUrls.Create
                 OriginalUrl = request.Url,
                 ShortenedUrl = _urlShortenerService.ShortenUrl(request.Url),
             };
-
-            await _createShortUrlRepository.AddShortUrl(shortUrl);
-
+            await _shortUrlRepository.AddShortUrl(shortUrl);
             return shortUrl.ShortenedUrl;
         }
     }
