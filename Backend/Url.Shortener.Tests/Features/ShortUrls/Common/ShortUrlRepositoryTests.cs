@@ -143,5 +143,55 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
 
             Assert.Equal(expected, actual);
         }
+
+        /// <summary>
+        /// Tests the <see cref="ShortUrlRepository.ShortUrlExists(string)"/> method when no entry exists.
+        /// </summary>
+        [Fact]
+        public async Task ShortUrlExists_ReturnsFalse()
+        {
+            var shortUrl = "ShortUrl";
+
+            var databaseName = $"ShortUrlExists_{Guid.NewGuid()}";
+            var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()
+                .UseInMemoryDatabase(databaseName)
+                .Options;
+
+            await using var shortUrlDbContext = new ShortUrlDbContext(dbContextOptions);
+            var shortUrlRepository = new ShortUrlRepository(shortUrlDbContext);
+            
+            var actual = await shortUrlRepository.ShortUrlExists(shortUrl);
+
+            Assert.False(actual);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="ShortUrlRepository.ShortUrlExists(string)"/> method when an entry exists.
+        /// </summary>
+        [Fact]
+        public async Task ShortUrlExists_ReturnsTrue()
+        {
+            var shortUrl = "ShortUrl";
+
+            var databaseName = $"ShortUrlExists_{Guid.NewGuid()}";
+            var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()
+                .UseInMemoryDatabase(databaseName)
+                .Options;
+
+            await using var shortUrlDbContext = new ShortUrlDbContext(dbContextOptions);
+            await shortUrlDbContext.ShortUrls.AddAsync(
+                new ShortUrl
+                {
+                    OriginalUrl = string.Empty,
+                    ShortenedUrl = shortUrl,
+                }
+            );
+            await shortUrlDbContext.SaveChangesAsync();
+
+            var shortUrlRepository = new ShortUrlRepository(shortUrlDbContext);
+            var actual = await shortUrlRepository.ShortUrlExists(shortUrl);
+
+            Assert.True(actual);
+        }
     }
 }

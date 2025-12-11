@@ -51,7 +51,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
             var shortenedUrlHash = "LliXArW";
 
             var mockUrlShortenerService = new Mock<IUrlShortenerService>();
-            mockUrlShortenerService.Setup(x => x.ShortenUrl(It.IsAny<string>())).Returns(shortenedUrlHash);
+            mockUrlShortenerService.Setup(x => x.ShortenUrl(It.IsAny<string>())).ReturnsAsync(shortenedUrlHash);
             
             var mockShortUrlRepository = new Mock<IShortUrlRepository>();
 

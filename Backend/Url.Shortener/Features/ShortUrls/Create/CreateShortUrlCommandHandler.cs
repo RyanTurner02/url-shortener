@@ -48,7 +48,7 @@ namespace Url.Shortener.Features.ShortUrls.Create
             var shortUrl = new ShortUrl
             {
                 OriginalUrl = request.Url,
-                ShortenedUrl = _urlShortenerService.ShortenUrl(request.Url),
+                ShortenedUrl = await _urlShortenerService.ShortenUrl(request.Url),
             };
             await _shortUrlRepository.AddShortUrl(shortUrl);
             return shortUrl.ShortenedUrl;

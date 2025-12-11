@@ -25,5 +25,12 @@
         /// <param name="shortUrl">The short URL to query.</param>
         /// <returns>The original URL.</returns>
         Task<string?> GetOriginalUrl(string shortUrl);
+
+        /// <summary>
+        /// Determines whether a given short URL exists.
+        /// </summary>
+        /// <param name="shortUrl">The short URL to query.</param>
+        /// <returns>True if the short URL exists, false otherwise.</returns>
+        Task<bool> ShortUrlExists(string shortUrl);
     }
 }

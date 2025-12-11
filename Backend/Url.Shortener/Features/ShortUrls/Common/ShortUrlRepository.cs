@@ -45,5 +45,11 @@ namespace Url.Shortener.Features.ShortUrls.Common
                 .Select(x => x.OriginalUrl)
                 .FirstOrDefaultAsync();
         }
+
+        /// <inheritdoc/>
+        public async Task<bool> ShortUrlExists(string shortUrl)
+        {
+            return await _context.ShortUrls.AnyAsync(x => x.ShortenedUrl == shortUrl);
+        }
     }
 }
