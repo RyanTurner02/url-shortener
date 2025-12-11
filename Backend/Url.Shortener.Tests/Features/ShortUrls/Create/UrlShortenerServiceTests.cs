@@ -11,6 +11,37 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
     public sealed class UrlShortenerServiceTests
     {
         /// <summary>
+        /// Tests the <see cref="UrlShortenerService.ShortenUrl(string)"/> when the original URL is empty.
+        /// </summary>
+        [Fact]
+        public async Task ShortenUrl_EmptyOriginalUrl_ReturnsEmptyString()
+        {
+            var originalUrl = string.Empty;
+
+            var mockUrlRandomizer = new Mock<IUrlRandomizer>();
+            var mockShortUrlRepository = new Mock<IShortUrlRepository>();
+
+            var urlShortenerService = new UrlShortenerService(
+                mockUrlRandomizer.Object,
+                mockShortUrlRepository.Object);
+
+            var actual = await urlShortenerService.ShortenUrl(originalUrl);
+
+            Assert.True(string.IsNullOrEmpty(actual));
+
+            mockUrlRandomizer.Verify(
+                x => x.Randomize(
+                    It.IsAny<int>(),
+                    It.IsAny<string>()),
+                Times.Never);
+
+            mockShortUrlRepository.Verify(
+                x => x.ShortUrlExists(
+                    It.IsAny<string>()),
+                Times.Never);
+        }
+
+        /// <summary>
         /// Tests the <see cref="UrlShortenerService.ShortenUrl(string)"/> method.
         /// </summary>
         [Fact]
