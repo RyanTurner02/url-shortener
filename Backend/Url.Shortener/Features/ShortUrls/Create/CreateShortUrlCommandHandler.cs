@@ -50,6 +50,12 @@ namespace Url.Shortener.Features.ShortUrls.Create
                 OriginalUrl = request.Url,
                 ShortenedUrl = await _urlShortenerService.ShortenUrl(request.Url),
             };
+
+            if (string.IsNullOrEmpty(shortUrl.ShortenedUrl))
+            {
+                return string.Empty;
+            }
+
             await _shortUrlRepository.AddShortUrl(shortUrl);
             return shortUrl.ShortenedUrl;
         }

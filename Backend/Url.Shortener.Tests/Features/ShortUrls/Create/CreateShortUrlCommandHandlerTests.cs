@@ -45,6 +45,43 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
         }
 
         [Fact]
+        public async Task Handle_ReturnsEmptyString()
+        {
+            var originalUrl = "https://example.com";
+
+            var mockUrlShortenerService = new Mock<IUrlShortenerService>();
+            mockUrlShortenerService.Setup(x => x.ShortenUrl(It.IsAny<string>())).ReturnsAsync(string.Empty);
+
+            var mockShortUrlRepository = new Mock<IShortUrlRepository>();
+            mockShortUrlRepository.Setup(x => x.GetShortUrl(It.IsAny<string>())).ReturnsAsync(string.Empty);
+
+            var createShortUrlCommandHandler = new CreateShortUrlCommandHandler(
+                mockUrlShortenerService.Object,
+                mockShortUrlRepository.Object);
+            var createShortUrlCommand = new CreateShortUrlCommand(originalUrl);
+
+            var actual = await createShortUrlCommandHandler.Handle(createShortUrlCommand, CancellationToken.None);
+
+            Assert.True(string.IsNullOrEmpty(actual));
+
+            mockUrlShortenerService.Verify(
+                x => x.ShortenUrl(
+                    It.IsAny<string>()),
+                Times.Once);
+
+            mockShortUrlRepository.Verify(
+                x => x.AddShortUrl(
+                    It.IsAny<ShortUrl>()),
+                Times.Never);
+
+            mockShortUrlRepository.Verify(
+                x => x.GetShortUrl(
+                    It.Is<string>(
+                        y => y == originalUrl)),
+                Times.Once);
+        }
+
+        [Fact]
         public async Task Handle_ReturnsShortenedUrl()
         {
             var originalUrl = "https://example.com/";
