@@ -1,3 +1,4 @@
+import { DuplicateConflictResponse } from "@/responses/duplicate-conflict-response";
 import axios from "axios";
 
 /**
@@ -11,7 +12,15 @@ export const createShortUrl = async (url: string) => {
             Url: url
         });
         return response.data;
-    } catch {
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            if (error.response && error.response.status === 409) {
+                return new DuplicateConflictResponse(
+                    error.response.data.error,
+                    error.response.data.message);
+            }
+        }
+
         return null;
     }
 }
