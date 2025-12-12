@@ -42,6 +42,43 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
         }
 
         /// <summary>
+        /// Tests the <see cref="UrlShortenerService.ShortenUrl(string)"/> when the maximum attempts are exceeded.
+        /// </summary>
+        [Fact]
+        public async Task ShortenUrl_MaxAttempts_ReturnsEmptyString()
+        {
+            var originalUrl = "https://example.com";
+            var encodedUrl = "BQ4R18M89B0BpYoVxEOTixQNzxbntfovLW6TraZtiFdNGBsykjkKD2ML9V4EWTz3jVsBDLDUjeBL3JbgeBCyWv";
+            var randomizedUrl = "ShortUrl";
+            var randomizeLength = 7;
+
+            var mockUrlRandomizer = new Mock<IUrlRandomizer>();
+            mockUrlRandomizer.Setup(x => x.Randomize(It.IsAny<int>(), It.IsAny<string>())).Returns(randomizedUrl);
+
+            var mockShortUrlRepository = new Mock<IShortUrlRepository>();
+            mockShortUrlRepository.Setup(x => x.ShortUrlExists(It.IsAny<string>())).ReturnsAsync(true);
+
+            var urlShortenerService = new UrlShortenerService(
+                mockUrlRandomizer.Object,
+                mockShortUrlRepository.Object);
+
+            var actual = await urlShortenerService.ShortenUrl(originalUrl);
+
+            Assert.True(string.IsNullOrEmpty(actual));
+
+            mockUrlRandomizer.Verify(
+                x => x.Randomize(
+                    It.Is<int>(y => y == randomizeLength),
+                    It.Is<string>(y => y == encodedUrl)),
+                Times.Exactly(5));
+
+            mockShortUrlRepository.Verify(
+                x => x.ShortUrlExists(
+                    It.Is<string>(y => y == randomizedUrl)),
+                Times.Exactly(5));
+        }
+
+        /// <summary>
         /// Tests the <see cref="UrlShortenerService.ShortenUrl(string)"/> method.
         /// </summary>
         [Fact]

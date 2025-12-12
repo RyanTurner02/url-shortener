@@ -16,7 +16,7 @@ namespace Url.Shortener.Features.ShortUrls.Create
         /// <summary>
         /// The maximum attempts to generate the short URL.
         /// </summary>
-        private const int MAX_ATTEMPTS = 10;
+        private const int MAX_ATTEMPTS = 5;
 
         /// <summary>
         /// The url randomizer.
@@ -51,9 +51,9 @@ namespace Url.Shortener.Features.ShortUrls.Create
 
             var hashedUrl = UrlHasher.Hash(originalUrl);
             var encodedUrl = UrlEncoder.Encode(hashedUrl);
-
             var randomizedUrl = string.Empty;
-            for (var i = 0; i < MAX_ATTEMPTS; i++)
+
+            for (var currentAttempt = 0; currentAttempt < MAX_ATTEMPTS; currentAttempt++)
             {
                 randomizedUrl = _urlRandomizer.Randomize(
                     SHORT_URL_LENGTH,
@@ -61,11 +61,11 @@ namespace Url.Shortener.Features.ShortUrls.Create
 
                 if (!await _shortUrlRepository.ShortUrlExists(randomizedUrl))
                 {
-                    break;
+                    return randomizedUrl;
                 }
             }
 
-            return randomizedUrl;
+            return string.Empty;
         }
     }
 }
