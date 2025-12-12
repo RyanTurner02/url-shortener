@@ -1,11 +1,10 @@
-﻿using Url.Shortener.Features.ShortUrls.Create;
-using MediatR;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System.Net.Http.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Url.Shortener.Features.ShortUrls.Create;
 
 namespace Url.Shortener.Tests.Features.ShortUrls.Create
 {
@@ -41,12 +40,13 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
             using var client = app.CreateClient();
 
             var response = await client.PostAsJsonAsync(route, payload);
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            var body = await response.Content.ReadFromJsonAsync<DuplicateConflictResponse>();
 
-            Assert.Equal(StatusCodes.Status500InternalServerError, (int)response.StatusCode);
-            Assert.NotNull(problem);
-            Assert.Equal("Failed to generate a unique short URL.", problem.Detail);
-            Assert.Equal(StatusCodes.Status500InternalServerError, problem.Status);
+            Assert.Equal(StatusCodes.Status409Conflict, (int)response.StatusCode);
+
+            Assert.NotNull(body);
+            Assert.Equal("DuplicateConflict", body.Error);
+            Assert.Equal("Failed to generate a unique short URL. Please try again later.", body.Message);
 
             senderMock.Verify(
                 s => s.Send(

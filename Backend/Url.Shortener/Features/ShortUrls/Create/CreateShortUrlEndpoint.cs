@@ -34,9 +34,7 @@ namespace Url.Shortener.Features.ShortUrls.Create
 
             if (string.IsNullOrEmpty(shortUrlHash))
             {
-                return TypedResults.Problem(
-                    detail: "Failed to generate a unique short URL.",
-                    statusCode: StatusCodes.Status500InternalServerError);
+                return TypedResults.Conflict(new DuplicateConflictResponse());
             }
 
             var fullUrl = $"{req.Scheme}://{req.Host}{req.Path}{shortUrlHash}";
