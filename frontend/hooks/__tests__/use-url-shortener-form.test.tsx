@@ -68,4 +68,30 @@ describe("useUrlShortenerForm", () => {
 
     expect(form.getValues().shortenedUrl).toBe("ShortUrl");
   });
+
+  it("allows resubmitting when there is an error", async () => {
+    const exampleUrl = "https://example.com";
+    const { result } = renderHook(() => useUrlShortenerForm(), {
+      wrapper: QueryProviderWrapper,
+    });
+    const { form, onSubmit } = result.current;
+
+    mockCreateShortUrl.mockResolvedValue({
+      error: "DuplicateConflict",
+      message: "Failed to generate a unique short URL. Please try again later."
+    });
+    await act(async () => {
+      await onSubmit({ originalUrl: exampleUrl });
+    });
+
+    mockCreateShortUrl.mockResolvedValue({ shortUrl: "ShortUrl" });
+    await act(async () => {
+      await onSubmit({ originalUrl: exampleUrl });
+    });
+
+    expect(mockCreateShortUrl).toHaveBeenCalledWith(exampleUrl);
+    expect(mockCreateShortUrl).toHaveBeenCalledTimes(2);
+
+    expect(form.getValues().shortenedUrl).toBe("ShortUrl");
+  });
 });
