@@ -9,6 +9,13 @@ export const handlers = [
             return HttpResponse.error();
         }
 
+        if (body.Url === "duplicate") {
+            return HttpResponse.json({
+                error: "DuplicateConflict",
+                message: "Failed to generate a unique short URL. Please try again later."
+            });
+        }
+
         return HttpResponse.json({
             ShortUrl: "http://localhost:5000/ShortUrl"
         })
