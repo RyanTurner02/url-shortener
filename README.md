@@ -24,4 +24,14 @@ https://github.com/RyanTurner02/url-shortener.git
 
 ### Usage
 
-For instructions on debugging the app and running tests, see the frontend's [**README.md**](./frontend/README.md) and the backend's [**README.md**](./Backend/README.md) files.
+This repository contains a frontend and backend that run as separate applications.
+
+To run the web app locally:
+
+1. Start the backend
+2. Start the frontend
+
+For detailed setup, debugging, and testing instructions, see:
+
+* **Frontend:** [**README.md**](./frontend/README.md)
+* **Backend:** [**README.md**](./Backend/README.md)
