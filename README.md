@@ -24,25 +24,4 @@ https://github.com/RyanTurner02/url-shortener.git
 
 ### Usage
 
-#### Frontend
-
-1. Open **VS Code**
-2. Select **Open Folder...**
-3. Open the **frontend** folder (`url-shortener/frontend`)
-4. Open the terminal (**Terminal** > **New Terminal**)
-5. Install dependencies:
-
-```bash
-npm install
-```
-
-6. Go to the **Run and Debug** tab
-7. Start the **Next.js: debug full stack** configuration
-
-#### Backend
-
-1. Open **Visual Studio**
-2. Click on **Open a project or solution**
-3. Open the **Backend.sln** file (`url-shortener/Backend/Backend.sln`)
-4. Build the solution (**Build** > **Build Solution**)
-5. Run the **Backend** debugger profile
+For instructions on debugging the app and running tests, see the frontend's [**README.md**](./frontend/README.md) and the backend's [**README.md**](./Backend/README.md) files.
