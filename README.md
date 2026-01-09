@@ -4,9 +4,9 @@ A fullstack URL shortener web app.
 
 ## What is a URL Shortener?
 
-A URL shortener is a tool that takes a long web address and converts it into a shorter link that is easy to share. When someone clicks the shortened URL, they are redirected to the original, long URL.
+A URL shortener is a tool that takes a long web address and converts it into a shorter link that is easy to share. When someone clicks a shortened URL, they are redirected to the original, long URL.
 
-Examples of popular websites that use URL shortener tools:
+Popular websites that use URL shortening:
 
 * Twitter/X has [t.co](https://t.co) for sharing links
 * LinkedIn has [lnkd.in](https://lnkd.in) for sharing links
