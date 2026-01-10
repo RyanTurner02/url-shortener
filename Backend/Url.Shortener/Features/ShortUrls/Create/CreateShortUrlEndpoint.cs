@@ -30,9 +30,14 @@ namespace Url.Shortener.Features.ShortUrls.Create
             ISender sender,
             HttpRequest req)
         {
-            var shortUrlHash = await sender.Send(createShortUrlCommand);    
-            var fullUrl = $"{req.Scheme}://{req.Host}{req.Path}{shortUrlHash}";
+            var shortUrlHash = await sender.Send(createShortUrlCommand);
 
+            if (string.IsNullOrEmpty(shortUrlHash))
+            {
+                return TypedResults.Conflict(new DuplicateConflictResponse());
+            }
+
+            var fullUrl = $"{req.Scheme}://{req.Host}{req.Path}{shortUrlHash}";
             return TypedResults.Created(req.Path, new ShortUrlResponse(fullUrl));
         }
     }
