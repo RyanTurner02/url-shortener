@@ -9,6 +9,7 @@ import { DuplicateConflictResponse } from "@/responses/duplicate-conflict-respon
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
+import { NullShortUrlResponse } from "@/responses/null-short-url-response";
 
 export default function useUrlShortenerForm() {
   const form = useForm<UrlShortenerFormValues>({
@@ -25,15 +26,19 @@ export default function useUrlShortenerForm() {
     }
 
     previousOriginalUrl.current = data.originalUrl;
-    
-    const result: ShortUrlResponse | DuplicateConflictResponse = await createShortUrlMutation(
-      data.originalUrl
-    );
 
-    if ("shortUrl" in result) {
+    const result:
+      | ShortUrlResponse
+      | DuplicateConflictResponse
+      | NullShortUrlResponse = await createShortUrlMutation(data.originalUrl);
+
+    if (result instanceof ShortUrlResponse) {
       form.setValue("shortenedUrl", result.shortUrl);
       canResubmit.current = false;
-    } else if ("error" in result) {
+    } else if (result instanceof DuplicateConflictResponse) {
+      // TODO: Display toast with error message.
+      canResubmit.current = true;
+    } else if (result instanceof NullShortUrlResponse) {
       // TODO: Display toast with error message.
       canResubmit.current = true;
     }

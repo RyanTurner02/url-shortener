@@ -5,6 +5,12 @@ export const handlers = [
     http.post("http://localhost:5000/", async ({ request }) => {
         const body = await request.json() as ICreateShortUrlRequest;
 
+        if (body.Url === "OriginalUrl") {
+            return HttpResponse.json({
+                shortUrl: "ShortUrl"
+            });
+        }
+
         if (body.Url === "error") {
             return HttpResponse.error();
         }

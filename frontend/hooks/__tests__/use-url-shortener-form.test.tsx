@@ -1,6 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
 import useUrlShortenerForm from "@/hooks/use-url-shortener-form";
 import { QueryProviderWrapper } from "@/test-utils";
+import { ShortUrlResponse } from "@/responses/short-url-response";
+import { DuplicateConflictResponse } from "@/responses/duplicate-conflict-response";
 
 const mockCreateShortUrl = vi.fn();
 
@@ -26,7 +28,7 @@ describe("useUrlShortenerForm", () => {
   });
 
   it("updates short url on submit", async () => {
-    mockCreateShortUrl.mockResolvedValue({ shortUrl: "ShortUrl" });
+    mockCreateShortUrl.mockResolvedValue(new ShortUrlResponse("ShortUrl"));
 
     const { result } = renderHook(() => useUrlShortenerForm(), {
       wrapper: QueryProviderWrapper,
@@ -47,7 +49,7 @@ describe("useUrlShortenerForm", () => {
   });
 
   it("does not resubmit the same original url", async () => {
-    mockCreateShortUrl.mockResolvedValue({ shortUrl: "ShortUrl" });
+    mockCreateShortUrl.mockResolvedValue(new ShortUrlResponse("ShortUrl"));
 
     const exampleUrl = "https://example.com";
     const { result } = renderHook(() => useUrlShortenerForm(), {
@@ -60,8 +62,8 @@ describe("useUrlShortenerForm", () => {
     });
 
     await act(async () => {
-      await onSubmit({ originalUrl: exampleUrl })
-    })
+      await onSubmit({ originalUrl: exampleUrl });
+    });
 
     expect(mockCreateShortUrl).toHaveBeenCalledWith(exampleUrl);
     expect(mockCreateShortUrl).toHaveBeenCalledOnce();
@@ -76,15 +78,17 @@ describe("useUrlShortenerForm", () => {
     });
     const { form, onSubmit } = result.current;
 
-    mockCreateShortUrl.mockResolvedValue({
-      error: "DuplicateConflict",
-      message: "Failed to generate a unique short URL. Please try again later."
-    });
+    mockCreateShortUrl.mockResolvedValue(
+      new DuplicateConflictResponse(
+        "DuplicateConflict",
+        "Failed to generate a unique short URL. Please try again later."
+      )
+    );
     await act(async () => {
       await onSubmit({ originalUrl: exampleUrl });
     });
 
-    mockCreateShortUrl.mockResolvedValue({ shortUrl: "ShortUrl" });
+    mockCreateShortUrl.mockResolvedValue(new ShortUrlResponse("ShortUrl"));
     await act(async () => {
       await onSubmit({ originalUrl: exampleUrl });
     });

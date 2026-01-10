@@ -1,27 +1,34 @@
 import { createShortUrl } from "@/api/create-short-url";
 import { DuplicateConflictResponse } from "@/responses/duplicate-conflict-response";
+import { NullShortUrlResponse } from "@/responses/null-short-url-response";
+import { ShortUrlResponse } from "@/responses/short-url-response";
 
 describe("createShortUrl", () => {
-    it("creates a short URL", async () => {
-        const response = await createShortUrl("https://example.com/");
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
 
-        expect(response).toEqual({
-            ShortUrl: "http://localhost:5000/ShortUrl"
-        });
+    it("creates a short URL", async () => {
+        const expected = new ShortUrlResponse("ShortUrl");
+        const response = await createShortUrl("OriginalUrl");
+
+        expect(response).toEqual(expected);
     });
 
     it("returns DuplicatedConflictResponse on duplicate", async () => {
         const expected = new DuplicateConflictResponse(
             "DuplicateConflict",
-            "Failed to generate a unique short URL. Please try again later.");
+            "Failed to generate a unique short URL. Please try again later."
+        );
         const response = await createShortUrl("duplicate");
 
         expect(response).toEqual(expected);
     });
 
-    it("returns null on failure", async () => {
+    it("returns NullShortUrlResponse on failure", async () => {
+        const expected = new NullShortUrlResponse();
         const response = await createShortUrl("error");
         
-        expect(response).toBeNull();
+        expect(response).toEqual(expected);
     });
 });
