@@ -2,16 +2,13 @@ import { render, screen } from "@testing-library/react";
 import { UrlShortenerForm } from "@/components/forms/url-shortener-form/url-shortener-form";
 import { QueryProviderWrapper } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
+import { ShortUrlResponse } from "@/responses/short-url-response";
 
-vi.mock("@/hooks/use-create-shortened-url", () => {
-  return {
-    default: () => {
-      return async (originalUrl: string) => {
-        return { shortUrl: "ShortUrl" };
-      };
-    },
-  };
-});
+const mockCreateShortUrl = vi.fn();
+
+vi.mock("@/hooks/use-create-shortened-url", () => ({
+  default: () => mockCreateShortUrl,
+}));
 
 describe("UrlShortenerForm", () => {
   afterEach(() => {
@@ -69,6 +66,8 @@ describe("UrlShortenerForm", () => {
   });
 
   it("displays a short url after submitting a valid original url", async () => {
+    mockCreateShortUrl.mockResolvedValue(new ShortUrlResponse("ShortUrl"));
+
     const user = userEvent.setup();
     render(
         <QueryProviderWrapper>

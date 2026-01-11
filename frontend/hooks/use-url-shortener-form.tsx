@@ -4,25 +4,43 @@ import {
   urlShortenerFormSchema,
   UrlShortenerFormValues,
 } from "@/schemas/url-shortener-form-schema";
-import { IShortUrlResponse } from "@/responses/short-url-response";
+import { ShortUrlResponse } from "@/responses/short-url-response";
+import { DuplicateConflictResponse } from "@/responses/duplicate-conflict-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useRef } from "react";
+import { NullShortUrlResponse } from "@/responses/null-short-url-response";
 
 export default function useUrlShortenerForm() {
   const form = useForm<UrlShortenerFormValues>({
     resolver: zodResolver(urlShortenerFormSchema),
     defaultValues: defaultUrlShortenerFormValues,
   });
-
+  const canResubmit = useRef(false);
+  const previousOriginalUrl = useRef("");
   const createShortUrlMutation = useCreateShortenedUrl();
 
   const onSubmit = async (data: UrlShortenerFormValues) => {
-    const result: IShortUrlResponse = await createShortUrlMutation(
-      data.originalUrl
-    );
+    if (!canResubmit.current && data.originalUrl === previousOriginalUrl.current) {
+      return;
+    }
 
-    if (result) {
+    previousOriginalUrl.current = data.originalUrl;
+
+    const result:
+      | ShortUrlResponse
+      | DuplicateConflictResponse
+      | NullShortUrlResponse = await createShortUrlMutation(data.originalUrl);
+
+    if (result instanceof ShortUrlResponse) {
       form.setValue("shortenedUrl", result.shortUrl);
+      canResubmit.current = false;
+    } else if (result instanceof DuplicateConflictResponse) {
+      // TODO: Display toast with error message.
+      canResubmit.current = true;
+    } else if (result instanceof NullShortUrlResponse) {
+      // TODO: Display toast with error message.
+      canResubmit.current = true;
     }
   };
 

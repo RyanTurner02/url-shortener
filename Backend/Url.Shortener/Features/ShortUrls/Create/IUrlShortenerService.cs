@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="originalUrl">The original url.</param>
         /// <returns>The shortened url.</returns>
-        string ShortenUrl(string originalUrl);
+        Task<string> ShortenUrl(string originalUrl);
     }
 }
