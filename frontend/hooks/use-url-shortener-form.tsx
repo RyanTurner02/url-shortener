@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
 import { NullShortUrlResponse } from "@/responses/null-short-url-response";
+import { toast } from "sonner";
 
 export default function useUrlShortenerForm() {
   const form = useForm<UrlShortenerFormValues>({
@@ -22,6 +23,7 @@ export default function useUrlShortenerForm() {
 
   const onSubmit = async (data: UrlShortenerFormValues) => {
     if (!canResubmit.current && data.originalUrl === previousOriginalUrl.current) {
+      toast.info(`Short URL for "${data.originalUrl}" has already been created.`);
       return;
     }
 
@@ -33,13 +35,14 @@ export default function useUrlShortenerForm() {
       | NullShortUrlResponse = await createShortUrlMutation(data.originalUrl);
 
     if (result instanceof ShortUrlResponse) {
+      toast.success("Short URL has been created.");
       form.setValue("shortenedUrl", result.shortUrl);
       canResubmit.current = false;
     } else if (result instanceof DuplicateConflictResponse) {
-      // TODO: Display toast with error message.
+      toast.error(result.message);
       canResubmit.current = true;
     } else if (result instanceof NullShortUrlResponse) {
-      // TODO: Display toast with error message.
+      toast.error(result.message);
       canResubmit.current = true;
     }
   };

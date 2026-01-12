@@ -5,6 +5,7 @@ import useUrlShortenerForm from "@/hooks/use-url-shortener-form";
 import OriginalUrlField from "@/components/forms/url-shortener-form/fields/original-url-field";
 import ShortenedUrlField from "@/components/forms/url-shortener-form/fields/shortened-url-field";
 import SubmitButton from "@/components/forms/url-shortener-form/buttons/submit-button";
+import { Toaster } from "sonner";
 
 export const UrlShortenerForm = () => {
   const { form, onSubmit } = useUrlShortenerForm();
@@ -20,6 +21,7 @@ export const UrlShortenerForm = () => {
         <SubmitButton />
         <ShortenedUrlField control={form.control} />
       </FieldSet>
+      <Toaster richColors />
     </form>
   );
 };
