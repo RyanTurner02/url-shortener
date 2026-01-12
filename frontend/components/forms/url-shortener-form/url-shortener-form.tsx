@@ -11,7 +11,7 @@ export const UrlShortenerForm = () => {
 
   return (
     <form
-      className="p-10"
+      className="px-3 sm:px-16 md:px-32 lg:px-48 xl:px-60 2xl:px-72"
       id="url-shortener-form"
       onSubmit={form.handleSubmit(onSubmit)}
     >
