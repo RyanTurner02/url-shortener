@@ -21,7 +21,7 @@ export default function OriginalUrlField({ control }: OriginalUrlFieldProps) {
             {...field}
             id="original-url"
             aria-invalid={fieldState.invalid}
-            placeholder="https://example.com/long-url-here"
+            placeholder="https://example.com/"
           />
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
