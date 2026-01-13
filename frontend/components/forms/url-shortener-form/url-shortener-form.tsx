@@ -19,6 +19,7 @@ export const UrlShortenerForm = () => {
       <FieldSet>
         <OriginalUrlField control={form.control} />
         <SubmitButton />
+        <div className="my-1 border" />
         <ShortenedUrlField control={form.control} />
       </FieldSet>
       <Toaster richColors />
