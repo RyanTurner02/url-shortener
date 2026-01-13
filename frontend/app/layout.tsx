@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/providers/query-provider";
+import Footer from "@/components/footer/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +29,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <QueryProvider>
-          {children}
+          <div className="flex flex-col items-center justify-between h-screen">
+            <main className="w-full mt-10 max-w-7xl">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </QueryProvider>
       </body>
     </html>
