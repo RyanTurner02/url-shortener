@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { CopyIcon } from "lucide-react";
 
-export default function CopyButton() {
+interface CopyButtonProps {
+  text: string;
+  copy: (text: string) => void;
+}
+
+export default function CopyButton({ text, copy }: CopyButtonProps) {
   return (
-    <Button className="cursor-pointer" type="button">
+    <Button className="cursor-pointer" type="button" onClick={() => copy(text)}>
       Copy <CopyIcon />
     </Button>
   );

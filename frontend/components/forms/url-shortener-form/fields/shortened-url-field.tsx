@@ -3,12 +3,15 @@ import { Input } from "@/components/ui/input";
 import { UrlShortenerFormValues } from "@/schemas/url-shortener-form-schema";
 import { Control, Controller } from "react-hook-form";
 import CopyButton from "@/components/forms/url-shortener-form/buttons/copy-button";
+import useCopyToClipboard from "@/hooks/use-copy-text-to-clipboard";
 
 interface ShortenedUrlFieldProps {
   control: Control<UrlShortenerFormValues>;
 }
 
 export default function ShortenedUrlField({ control }: ShortenedUrlFieldProps) {
+  const { copy } = useCopyToClipboard();
+
   return (
     <Controller
       name="shortenedUrl"
@@ -25,7 +28,7 @@ export default function ShortenedUrlField({ control }: ShortenedUrlFieldProps) {
               placeholder="https://url-shortener-example.com/shortened-url"
               readOnly
             />
-            <CopyButton />
+            <CopyButton text={field.value ?? ""} copy={copy} />
           </div>
         </Field>
       )}
