@@ -2,15 +2,13 @@ import Link from "next/link";
 
 export default function About() {
   return (
-    <div className="flex flex-col items-center px-2 sm:p-0">
-      <section className="w-full max-w-4xl p-4 mb-4">
+    <div className="flex flex-col items-center px-3 md:p-0">
+      <section className="w-full max-w-3xl mb-8">
         <h1 className="mb-2 text-4xl font-bold text-center">About</h1>
-        <p>
-          URL Shortener is a web app implementation of a URL shortener.
-        </p>
+        <p>URL Shortener is a web app implementation of a URL shortener.</p>
       </section>
 
-      <section className="w-full max-w-4xl p-4">
+      <section className="w-full max-w-3xl">
         <h2 className="mb-2 text-3xl font-bold text-center">
           What is a URL Shortener?
         </h2>
