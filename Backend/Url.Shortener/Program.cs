@@ -10,8 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<ShortUrlDbContext>(opt => opt.UseInMemoryDatabase("ShortUrl"));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+var connectionString = string.Empty;
+
+builder.Services.AddDbContext<ShortUrlDbContext>(options =>
+{
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
+
+builder.Services.AddDbContext<ShortUrlDbContext>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
