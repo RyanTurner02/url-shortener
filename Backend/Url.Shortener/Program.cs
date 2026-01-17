@@ -12,12 +12,15 @@ builder.Services.AddOpenApi();
 
 var connectionString = string.Empty;
 
+if (builder.Environment.IsDevelopment())
+{
+    connectionString = builder.Configuration["Database:ConnectionString"];
+}
+
 builder.Services.AddDbContext<ShortUrlDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
-
-builder.Services.AddDbContext<ShortUrlDbContext>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
