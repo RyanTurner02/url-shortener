@@ -1,27 +1,36 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Url.Shortener.Features.ShortUrls;
 using Url.Shortener.Features.ShortUrls.Common;
+using Url.Shortener.Tests.Infrastructure;
 
 namespace Url.Shortener.Tests.Features.ShortUrls.Common
 {
     /// <summary>
     /// Tests the <see cref="ShortUrlRepository"/> class.
     /// </summary>
-    public sealed class ShortUrlRepositoryTests
+    public sealed class ShortUrlRepositoryTests : IClassFixture<MySqlContainerFixture>
     {
+        /// <summary>
+        /// The MySQL test container fixture
+        /// </summary>
+        private readonly MySqlContainerFixture _fixture;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ShortUrlRepositoryTests(MySqlContainerFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
         /// <summary>
         /// Tests the <see cref="ShortUrlRepository.AddShortUrl(ShortUrl)"/> method.
         /// </summary>
         [Fact]
         public async Task AddShortUrl_ReturnsOneEntry()
         {
-            var databaseName = $"AddShortUrl_{Guid.NewGuid()}";
-            var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
-
-            await using var shortUrlDbContext = new ShortUrlDbContext(dbContextOptions);
-            var shortUrlRepository = new ShortUrlRepository(shortUrlDbContext);
+            await using var db = _fixture.CreateShortUrlDbContext();
+            var shortUrlRepository = new ShortUrlRepository(db);
 
             var shortUrl = new ShortUrl
             {
@@ -33,14 +42,17 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
             var actual = await shortUrlRepository.AddShortUrl(shortUrl);
 
             Assert.Equal(expected, actual);
-            Assert.Single(shortUrlDbContext.ShortUrls);
+            Assert.Single(db.ShortUrls);
 
-            var storedShortUrl = await shortUrlDbContext.ShortUrls.SingleAsync();
+            var storedShortUrl = await db.ShortUrls.SingleAsync();
 
             Assert.Equal(shortUrl.Id, storedShortUrl.Id);
             Assert.Equal(shortUrl.OriginalUrl, storedShortUrl.OriginalUrl);
             Assert.Equal(shortUrl.ShortenedUrl, storedShortUrl.ShortenedUrl);
             Assert.Equal(shortUrl.CreatedAt, storedShortUrl.CreatedAt);
+
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.MigrateAsync();
         }
 
         /// <summary>
@@ -49,18 +61,16 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
         [Fact]
         public async Task GetShortUrl_ReturnsNull()
         {
-            var databaseName = $"GetShortUrl_{Guid.NewGuid()}";
-            var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
-
-            await using var shortUrlDbContext = new ShortUrlDbContext(dbContextOptions);
-            var shortUrlRepository = new ShortUrlRepository(shortUrlDbContext);
+            await using var db = _fixture.CreateShortUrlDbContext();
+            var shortUrlRepository = new ShortUrlRepository(db);
 
             var originalUrl = "https://example.com/";
             var actual = await shortUrlRepository.GetShortUrl(originalUrl);
 
             Assert.Null(actual);
+
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.MigrateAsync();
         }
 
         /// <summary>
@@ -72,25 +82,23 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
             var originalUrl = "https://example.com";
             var expected = "ShortUrl";
 
-            var databaseName = $"GetShortUrl_{Guid.NewGuid()}";
-            var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
-
-            await using var shortUrlDbContext = new ShortUrlDbContext(dbContextOptions);
-            await shortUrlDbContext.ShortUrls.AddAsync(
+            await using var db = _fixture.CreateShortUrlDbContext();
+            await db.ShortUrls.AddAsync(
                 new ShortUrl
                 {
                     OriginalUrl = originalUrl,
                     ShortenedUrl = expected,
                 }
             );
-            await shortUrlDbContext.SaveChangesAsync();
+            await db.SaveChangesAsync();
 
-            var shortUrlRepository = new ShortUrlRepository(shortUrlDbContext);
+            var shortUrlRepository = new ShortUrlRepository(db);
             var actual = await shortUrlRepository.GetShortUrl(originalUrl);
 
             Assert.Equal(expected, actual);
+
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.MigrateAsync();
         }
 
         /// <summary>
@@ -101,17 +109,15 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
         {
             var shortUrl = "ShortUrl";
 
-            var databaseName = $"GetOriginalUrl_{Guid.NewGuid()}";
-            var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
-
-            await using var shortUrlDbContext = new ShortUrlDbContext(dbContextOptions);
-            var shortUrlRepository = new ShortUrlRepository(shortUrlDbContext);
+            await using var db = _fixture.CreateShortUrlDbContext();
+            var shortUrlRepository = new ShortUrlRepository(db);
 
             var actual = await shortUrlRepository.GetOriginalUrl(shortUrl);
 
             Assert.Null(actual);
+
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.MigrateAsync();
         }
 
         /// <summary>
@@ -123,25 +129,23 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
             string expected = "https://example.com";
             string shortUrl = "ShortUrl";
 
-            var databaseName = $"GetOriginalUrl_{Guid.NewGuid()}";
-            var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
-
-            await using var shortUrlDbContext = new ShortUrlDbContext(dbContextOptions);
-            await shortUrlDbContext.ShortUrls.AddAsync(
+            await using var db = _fixture.CreateShortUrlDbContext();
+            await db.ShortUrls.AddAsync(
                 new ShortUrl
                 {
                     OriginalUrl = expected,
                     ShortenedUrl = shortUrl,
                 }
             );
-            await shortUrlDbContext.SaveChangesAsync();
+            await db.SaveChangesAsync();
 
-            var shortUrlRepository = new ShortUrlRepository(shortUrlDbContext);
+            var shortUrlRepository = new ShortUrlRepository(db);
             var actual = await shortUrlRepository.GetOriginalUrl(shortUrl);
 
             Assert.Equal(expected, actual);
+
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.MigrateAsync();
         }
 
         /// <summary>
@@ -152,17 +156,15 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
         {
             var shortUrl = "ShortUrl";
 
-            var databaseName = $"ShortUrlExists_{Guid.NewGuid()}";
-            var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
-
-            await using var shortUrlDbContext = new ShortUrlDbContext(dbContextOptions);
-            var shortUrlRepository = new ShortUrlRepository(shortUrlDbContext);
+            await using var db = _fixture.CreateShortUrlDbContext();
+            var shortUrlRepository = new ShortUrlRepository(db);
             
             var actual = await shortUrlRepository.ShortUrlExists(shortUrl);
 
             Assert.False(actual);
+
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.MigrateAsync();
         }
 
         /// <summary>
@@ -173,25 +175,23 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
         {
             var shortUrl = "ShortUrl";
 
-            var databaseName = $"ShortUrlExists_{Guid.NewGuid()}";
-            var dbContextOptions = new DbContextOptionsBuilder<ShortUrlDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
-
-            await using var shortUrlDbContext = new ShortUrlDbContext(dbContextOptions);
-            await shortUrlDbContext.ShortUrls.AddAsync(
+            await using var db = _fixture.CreateShortUrlDbContext();
+            await db.ShortUrls.AddAsync(
                 new ShortUrl
                 {
                     OriginalUrl = string.Empty,
                     ShortenedUrl = shortUrl,
                 }
             );
-            await shortUrlDbContext.SaveChangesAsync();
+            await db.SaveChangesAsync();
 
-            var shortUrlRepository = new ShortUrlRepository(shortUrlDbContext);
+            var shortUrlRepository = new ShortUrlRepository(db);
             var actual = await shortUrlRepository.ShortUrlExists(shortUrl);
 
             Assert.True(actual);
+
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.MigrateAsync();
         }
     }
 }
