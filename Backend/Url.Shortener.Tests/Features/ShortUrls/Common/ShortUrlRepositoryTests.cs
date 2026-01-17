@@ -18,6 +18,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="fixture">The MySQL test container fixture.</param>
         public ShortUrlRepositoryTests(MySqlContainerFixture fixture)
         {
             _fixture = fixture;
