@@ -3,6 +3,7 @@ import useUrlShortenerForm from "@/hooks/use-url-shortener-form";
 import { QueryProviderWrapper } from "@/test-utils";
 import { ShortUrlResponse } from "@/responses/short-url-response";
 import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
+import { ShortUrlResponseConstants } from "@/constants/short-url-response-constants";
 
 const mockCreateShortUrl = vi.fn();
 
@@ -31,7 +32,7 @@ describe("useUrlShortenerForm", () => {
     mockCreateShortUrl.mockResolvedValue(
       new ShortUrlResponse(
         ShortUrlResponseCodes.Success,
-        "Short URL has been successfully created.",
+        ShortUrlResponseConstants.SUCCESS_MESSAGE,
         "ShortUrl"));
 
     const { result } = renderHook(() => useUrlShortenerForm(), {
@@ -55,7 +56,7 @@ describe("useUrlShortenerForm", () => {
   it("does not resubmit the same original url", async () => {
     mockCreateShortUrl.mockResolvedValue(new ShortUrlResponse(
       ShortUrlResponseCodes.Success,
-      "Short URL has been successfully created.",
+      ShortUrlResponseConstants.SUCCESS_MESSAGE,
       "ShortUrl"));
 
     const exampleUrl = "https://example.com";
@@ -88,7 +89,7 @@ describe("useUrlShortenerForm", () => {
     mockCreateShortUrl.mockResolvedValue(
       new ShortUrlResponse(
         ShortUrlResponseCodes.DuplicateConflict,
-        "Failed to generate a unique short URL. Please try again later."
+        ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
       )
     );
     await act(async () => {
@@ -98,7 +99,7 @@ describe("useUrlShortenerForm", () => {
     mockCreateShortUrl.mockResolvedValue(
       new ShortUrlResponse(
         ShortUrlResponseCodes.Success,
-        "Short URL has been successfully created.",
+        ShortUrlResponseConstants.SUCCESS_MESSAGE,
         "ShortUrl"));
     await act(async () => {
       await onSubmit({ originalUrl: exampleUrl });

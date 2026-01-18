@@ -4,6 +4,7 @@ import { QueryProviderWrapper } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
 import { ShortUrlResponse } from "@/responses/short-url-response";
 import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
+import { ShortUrlResponseConstants } from "@/constants/short-url-response-constants";
 
 const mockCreateShortUrl = vi.fn();
 
@@ -70,7 +71,7 @@ describe("UrlShortenerForm", () => {
     mockCreateShortUrl.mockResolvedValue(
       new ShortUrlResponse(
         ShortUrlResponseCodes.Success,
-        "Short URL has been successfully created.",
+        ShortUrlResponseConstants.SUCCESS_MESSAGE,
         "ShortUrl"));
 
     const user = userEvent.setup();

@@ -1,4 +1,5 @@
 import { createShortUrl } from "@/api/create-short-url";
+import { ShortUrlResponseConstants } from "@/constants/short-url-response-constants";
 import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
 import { ShortUrlResponse } from "@/responses/short-url-response";
 import { AxiosError, AxiosHeaders } from "axios";
@@ -12,7 +13,7 @@ describe("createShortUrl", () => {
     it("creates a short URL", async () => {
         const expected = new ShortUrlResponse(
             ShortUrlResponseCodes.Success,
-            "Short URL has been successfully created.",
+            ShortUrlResponseConstants.SUCCESS_MESSAGE,
             "ShortUrl");
         const actual = await createShortUrl("OriginalUrl");
 
@@ -26,8 +27,8 @@ describe("createShortUrl", () => {
             status: 409,
             statusText: "Conflict",
             data: {
-                error: "DuplicateConflict",
-                message: "Failed to generate a unique short URL. Please try again later."
+                error: ShortUrlResponseCodes.DuplicateConflict,
+                message: ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
             },
             headers: new AxiosHeaders(),
             config: mockConfig,
@@ -45,7 +46,7 @@ describe("createShortUrl", () => {
 
         const expected = new ShortUrlResponse(
             ShortUrlResponseCodes.DuplicateConflict,
-            "Failed to generate a unique short URL. Please try again later."
+            ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
         );
         const actual = await createShortUrl("duplicate");
 
@@ -55,7 +56,7 @@ describe("createShortUrl", () => {
     it("returns NullShortUrlResponse on failure", async () => {
         const expected = new ShortUrlResponse(
             ShortUrlResponseCodes.NullShortUrl,
-            "Unable to create a short URL. Please try again later.");
+            ShortUrlResponseConstants.NULL_SHORT_URL_MESSAGE);
         const actual = await createShortUrl("error");
 
         expect(actual).toEqual(expected);

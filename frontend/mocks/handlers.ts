@@ -1,3 +1,5 @@
+import { ShortUrlResponseConstants } from "@/constants/short-url-response-constants";
+import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
 import { ICreateShortUrlRequest } from "@/requests/create-short-url-request";
 import { http, HttpResponse } from "msw";
 
@@ -17,8 +19,8 @@ export const handlers = [
 
         if (body.Url === "duplicate") {
             return HttpResponse.json({
-                error: "DuplicateConflict",
-                message: "Failed to generate a unique short URL. Please try again later."
+                error: ShortUrlResponseCodes.DuplicateConflict,
+                message: ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
             });
         }
 

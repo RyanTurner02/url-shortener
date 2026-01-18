@@ -1,3 +1,4 @@
+import { ShortUrlResponseConstants } from "@/constants/short-url-response-constants";
 import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
 import { ShortUrlResponse } from "@/responses/short-url-response";
 import axios from "axios";
@@ -16,7 +17,7 @@ export const createShortUrl = async (url: string) => {
 
         return new ShortUrlResponse(
             ShortUrlResponseCodes.Success,
-            "Short URL has been successfully created.",
+            ShortUrlResponseConstants.SUCCESS_MESSAGE,
             response.data.shortUrl);
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -29,6 +30,6 @@ export const createShortUrl = async (url: string) => {
 
         return new ShortUrlResponse(
             ShortUrlResponseCodes.NullShortUrl,
-            "Unable to create a short URL. Please try again later.");
+            ShortUrlResponseConstants.NULL_SHORT_URL_MESSAGE);
     }
 }
