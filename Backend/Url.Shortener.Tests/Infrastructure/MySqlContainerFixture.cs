@@ -20,7 +20,7 @@ namespace Url.Shortener.Tests.Infrastructure
             .Build();
 
         /// <summary>
-        /// Gets/Private Sets the database connection string.
+        /// Gets the database connection string.
         /// </summary>
         public string ConnectionString => _mySqlContainer.GetConnectionString();
 

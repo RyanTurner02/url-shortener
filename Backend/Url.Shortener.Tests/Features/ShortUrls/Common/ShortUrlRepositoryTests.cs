@@ -11,7 +11,7 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Common
     public sealed class ShortUrlRepositoryTests : IClassFixture<MySqlContainerFixture>
     {
         /// <summary>
-        /// The MySQL test container fixture
+        /// The MySQL test container fixture.
         /// </summary>
         private readonly MySqlContainerFixture _fixture;
 
