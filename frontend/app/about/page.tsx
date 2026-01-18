@@ -11,28 +11,34 @@ export default function About() {
 
         <p className="mb-4 text-pretty">
           A URL shortener is a tool that takes a long web address and converts
-          it into a shorter link that is easy to share. When someone clicks a
-          shortened URL, they are redirected to the original, long URL.
+          it into a shorter, easier-to-share link. When someone clicks a
+          shortened URL, they are automatically redirected to the original, long
+          URL.
         </p>
 
-        <p>Popular websites that use URL shortening:</p>
+        <p className="mb-4 text-pretty">
+          URL Shorteners are commonly used to make links more readable, save
+          space, and track analytics.
+        </p>
+
+        <p>Popular websites that use URL shortening include:</p>
         <ul className="pl-8 mb-4 list-disc">
           <li>
-            Twitter/X has{" "}
+            Twitter/X, which uses{" "}
             <Link className="text-link" href="https://t.co/" target="_blank">
               t.co
             </Link>{" "}
             for sharing links
           </li>
           <li>
-            LinkedIn has{" "}
+            LinkedIn, which uses{" "}
             <Link className="text-link" href="https://lnkd.in/" target="_blank">
               lnkd.in
             </Link>{" "}
             for sharing links
           </li>
           <li>
-            YouTube has{" "}
+            YouTube, which uses{" "}
             <Link
               className="text-link"
               href="https://youtu.be/"
