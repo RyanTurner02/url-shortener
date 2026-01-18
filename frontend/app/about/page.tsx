@@ -5,13 +5,10 @@ export default function About() {
     <div className="flex flex-col items-center px-3 md:p-0">
       <section className="w-full max-w-3xl mb-8">
         <h1 className="mb-2 text-4xl font-bold text-center">About</h1>
-        <p>URL Shortener is a web app implementation of a URL shortener.</p>
-      </section>
+        <p className="mb-4 text-pretty">
+          URL Shortener is a web app implementation of a URL shortener.
+        </p>
 
-      <section className="w-full max-w-3xl">
-        <h2 className="mb-2 text-3xl font-bold text-center">
-          What is a URL Shortener?
-        </h2>
         <p className="mb-4 text-pretty">
           A URL shortener is a tool that takes a long web address and converts
           it into a shorter link that is easy to share. When someone clicks a
