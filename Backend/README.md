@@ -30,7 +30,7 @@ dotnet ef database update
 3. Add the database connection string secret:
 
 ```bash
-dotnet user-secrets set "Database:ConnectionString" "server=<SERVER>; database=<DATABASE>; user=<USER>; password=<PASSWORD>"
+dotnet user-secrets set "Database:ConnectionString" "server=<SERVER>; database=<DATABASE>; user=<USER>; password=<PASSWORD>;"
 ```
 
 ### 3. Running the Database
