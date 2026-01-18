@@ -3,6 +3,7 @@ import { UrlShortenerForm } from "@/components/forms/url-shortener-form/url-shor
 import { QueryProviderWrapper } from "@/test-utils";
 import userEvent from "@testing-library/user-event";
 import { ShortUrlResponse } from "@/responses/short-url-response";
+import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
 
 const mockCreateShortUrl = vi.fn();
 
@@ -22,10 +23,10 @@ describe("UrlShortenerForm", () => {
       </QueryProviderWrapper>
     );
 
-    const button = screen.getByRole("button");
+    const [submitButton] = screen.getAllByRole("button");
     const [originalUrlField, shortUrlField] = screen.getAllByRole("textbox");
 
-    expect(button).toBeInTheDocument();
+    expect(submitButton).toBeInTheDocument();
     expect(originalUrlField).toBeInTheDocument();
     expect(shortUrlField).toBeInTheDocument();
   });
@@ -38,8 +39,8 @@ describe("UrlShortenerForm", () => {
         </QueryProviderWrapper>
     );
 
-    const button = screen.getByRole("button");
-    await user.click(button);    
+    const [submitButton] = screen.getAllByRole("button");
+    await user.click(submitButton);    
     
     const error = screen.getByRole("alert");
     expect(error).toBeInTheDocument();
@@ -54,8 +55,8 @@ describe("UrlShortenerForm", () => {
         </QueryProviderWrapper>
     );
 
-    const button = screen.getByRole("button");
-    await user.click(button);
+    const [submitButton] = screen.getAllByRole("button");
+    await user.click(submitButton);
 
     const error = screen.getByRole("alert");
     expect(error).toBeInTheDocument();
@@ -66,7 +67,11 @@ describe("UrlShortenerForm", () => {
   });
 
   it("displays a short url after submitting a valid original url", async () => {
-    mockCreateShortUrl.mockResolvedValue(new ShortUrlResponse("ShortUrl"));
+    mockCreateShortUrl.mockResolvedValue(
+      new ShortUrlResponse(
+        ShortUrlResponseCodes.Success,
+        "Short URL has been successfully created.",
+        "ShortUrl"));
 
     const user = userEvent.setup();
     render(
@@ -75,12 +80,12 @@ describe("UrlShortenerForm", () => {
         </QueryProviderWrapper>
     );
 
-    const button = screen.getByRole("button");
+    const [submitButton] = screen.getAllByRole("button");
     const [originalUrlField, shortUrlField] = screen.getAllByRole("textbox");
     expect(shortUrlField).toHaveValue("");
 
     await user.type(originalUrlField, "https://example.com/");
-    await user.click(button);
+    await user.click(submitButton);
 
     expect(shortUrlField).toHaveValue("ShortUrl");
   });
