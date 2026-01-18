@@ -1,6 +1,5 @@
 import { createShortUrl } from "@/api/create-short-url";
-import { DuplicateConflictResponse } from "@/responses/duplicate-conflict-response";
-import { NullShortUrlResponse } from "@/responses/null-short-url-response";
+import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
 import { ShortUrlResponse } from "@/responses/short-url-response";
 import { AxiosError, AxiosHeaders } from "axios";
 import axios from "axios";
@@ -11,7 +10,10 @@ describe("createShortUrl", () => {
     });
 
     it("creates a short URL", async () => {
-        const expected = new ShortUrlResponse("ShortUrl");
+        const expected = new ShortUrlResponse(
+            ShortUrlResponseCodes.Success,
+            "Short URL has been successfully created.",
+            "ShortUrl");
         const actual = await createShortUrl("OriginalUrl");
 
         expect(actual).toEqual(expected);
@@ -41,8 +43,8 @@ describe("createShortUrl", () => {
         vi.spyOn(axios, "post")
             .mockRejectedValue(axiosError);
 
-        const expected = new DuplicateConflictResponse(
-            "DuplicateConflict",
+        const expected = new ShortUrlResponse(
+            ShortUrlResponseCodes.DuplicateConflict,
             "Failed to generate a unique short URL. Please try again later."
         );
         const actual = await createShortUrl("duplicate");
@@ -51,7 +53,9 @@ describe("createShortUrl", () => {
     });
 
     it("returns NullShortUrlResponse on failure", async () => {
-        const expected = new NullShortUrlResponse();
+        const expected = new ShortUrlResponse(
+            ShortUrlResponseCodes.NullShortUrl,
+            "Unable to create a short URL. Please try again later.");
         const actual = await createShortUrl("error");
 
         expect(actual).toEqual(expected);
