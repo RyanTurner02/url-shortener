@@ -15,7 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "URL Shortener",
+  title: {
+    template: "%s | URL Shortener",
+    default: "URL Shortener"
+  }
 };
 
 export default function RootLayout({
