@@ -79,7 +79,7 @@ describe("useUrlShortenerForm", () => {
     expect(form.getValues().shortenedUrl).toBe("ShortUrl");
   });
 
-  it("allows resubmitting when there is an error", async () => {
+  it("allows resubmitting when there is a duplicate error", async () => {
     const exampleUrl = "https://example.com";
     const { result } = renderHook(() => useUrlShortenerForm(), {
       wrapper: QueryProviderWrapper,
@@ -90,6 +90,38 @@ describe("useUrlShortenerForm", () => {
       new ShortUrlResponse(
         ShortUrlResponseCodes.DuplicateConflict,
         ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
+      )
+    );
+    await act(async () => {
+      await onSubmit({ originalUrl: exampleUrl });
+    });
+
+    mockCreateShortUrl.mockResolvedValue(
+      new ShortUrlResponse(
+        ShortUrlResponseCodes.Success,
+        ShortUrlResponseConstants.SUCCESS_MESSAGE,
+        "ShortUrl"));
+    await act(async () => {
+      await onSubmit({ originalUrl: exampleUrl });
+    });
+
+    expect(mockCreateShortUrl).toHaveBeenCalledWith(exampleUrl);
+    expect(mockCreateShortUrl).toHaveBeenCalledTimes(2);
+
+    expect(form.getValues().shortenedUrl).toBe("ShortUrl");
+  });
+
+  it("allows resubmitting when there is a null error", async () => {
+    const exampleUrl = "https://example.com";
+    const { result } = renderHook(() => useUrlShortenerForm(), {
+      wrapper: QueryProviderWrapper,
+    });
+    const { form, onSubmit } = result.current;
+
+    mockCreateShortUrl.mockResolvedValue(
+      new ShortUrlResponse(
+        ShortUrlResponseCodes.NullShortUrl,
+        ShortUrlResponseConstants.NULL_SHORT_URL_MESSAGE
       )
     );
     await act(async () => {
