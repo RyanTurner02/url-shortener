@@ -4,6 +4,7 @@ import { QueryProviderWrapper } from "@/test-utils";
 import { ShortUrlResponse } from "@/responses/short-url-response";
 import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
 import { ShortUrlResponseConstants } from "@/constants/short-url-response-constants";
+import { toast } from "sonner";
 
 const mockCreateShortUrl = vi.fn();
 
@@ -29,6 +30,8 @@ describe("useUrlShortenerForm", () => {
   });
 
   it("updates short url on submit", async () => {
+    const toastSpy = vi.spyOn(toast, "success");
+
     mockCreateShortUrl.mockResolvedValue(
       new ShortUrlResponse(
         ShortUrlResponseCodes.Success,
@@ -47,6 +50,9 @@ describe("useUrlShortenerForm", () => {
       });
     });
 
+    expect(toastSpy).toHaveBeenCalledWith(ShortUrlResponseConstants.SUCCESS_MESSAGE);
+    expect(toastSpy).toHaveBeenCalledOnce();
+
     expect(mockCreateShortUrl).toHaveBeenCalledWith("https://example.com");
     expect(mockCreateShortUrl).toHaveBeenCalledOnce();
 
@@ -54,6 +60,9 @@ describe("useUrlShortenerForm", () => {
   });
 
   it("does not resubmit the same original url", async () => {
+    const successToastSpy = vi.spyOn(toast, "success");
+    const infoToastSpy = vi.spyOn(toast, "info");
+
     mockCreateShortUrl.mockResolvedValue(new ShortUrlResponse(
       ShortUrlResponseCodes.Success,
       ShortUrlResponseConstants.SUCCESS_MESSAGE,
@@ -73,6 +82,12 @@ describe("useUrlShortenerForm", () => {
       await onSubmit({ originalUrl: exampleUrl });
     });
 
+    expect(successToastSpy).toHaveBeenCalledWith(ShortUrlResponseConstants.SUCCESS_MESSAGE);
+    expect(successToastSpy).toHaveBeenCalledOnce();
+
+    expect(infoToastSpy).toHaveBeenCalledWith(`Short URL for "${exampleUrl}" has already been created.`);
+    expect(infoToastSpy).toHaveBeenCalledOnce();
+
     expect(mockCreateShortUrl).toHaveBeenCalledWith(exampleUrl);
     expect(mockCreateShortUrl).toHaveBeenCalledOnce();
 
@@ -80,6 +95,9 @@ describe("useUrlShortenerForm", () => {
   });
 
   it("allows resubmitting when there is a duplicate error", async () => {
+    const successToastSpy = vi.spyOn(toast, "success");
+    const errorToastSpy = vi.spyOn(toast, "error");
+
     const exampleUrl = "https://example.com";
     const { result } = renderHook(() => useUrlShortenerForm(), {
       wrapper: QueryProviderWrapper,
@@ -105,6 +123,12 @@ describe("useUrlShortenerForm", () => {
       await onSubmit({ originalUrl: exampleUrl });
     });
 
+    expect(successToastSpy).toHaveBeenCalledWith(ShortUrlResponseConstants.SUCCESS_MESSAGE);
+    expect(successToastSpy).toHaveBeenCalledOnce();
+
+    expect(errorToastSpy).toHaveBeenCalledWith(ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE);
+    expect(errorToastSpy).toHaveBeenCalledOnce();
+
     expect(mockCreateShortUrl).toHaveBeenCalledWith(exampleUrl);
     expect(mockCreateShortUrl).toHaveBeenCalledTimes(2);
 
@@ -112,6 +136,9 @@ describe("useUrlShortenerForm", () => {
   });
 
   it("allows resubmitting when there is a null error", async () => {
+    const successToastSpy = vi.spyOn(toast, "success");
+    const errorToastSpy = vi.spyOn(toast, "error");
+
     const exampleUrl = "https://example.com";
     const { result } = renderHook(() => useUrlShortenerForm(), {
       wrapper: QueryProviderWrapper,
@@ -136,6 +163,12 @@ describe("useUrlShortenerForm", () => {
     await act(async () => {
       await onSubmit({ originalUrl: exampleUrl });
     });
+
+    expect(successToastSpy).toHaveBeenCalledWith(ShortUrlResponseConstants.SUCCESS_MESSAGE);
+    expect(successToastSpy).toHaveBeenCalledOnce();
+
+    expect(errorToastSpy).toHaveBeenCalledWith(ShortUrlResponseConstants.NULL_SHORT_URL_MESSAGE);
+    expect(errorToastSpy).toHaveBeenCalledOnce();
 
     expect(mockCreateShortUrl).toHaveBeenCalledWith(exampleUrl);
     expect(mockCreateShortUrl).toHaveBeenCalledTimes(2);
