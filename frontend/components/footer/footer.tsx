@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="flex flex-wrap justify-center w-full gap-6 py-5 border-t bg-gray-50">
+    <footer className="flex flex-wrap justify-center w-full gap-6 py-5 border-t bg-gray-100">
       <Link className="text-link" href="/">
         URL Shortener
       </Link>
