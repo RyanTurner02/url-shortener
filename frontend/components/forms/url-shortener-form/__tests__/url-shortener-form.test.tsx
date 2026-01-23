@@ -13,7 +13,7 @@ vi.mock("@/hooks/use-create-shortened-url", () => ({
 }));
 
 describe("UrlShortenerForm", () => {
-  afterEach(() => {
+  beforeEach(() => {
     vi.clearAllMocks();
   });
 
@@ -87,7 +87,34 @@ describe("UrlShortenerForm", () => {
 
     await user.type(originalUrlField, "https://example.com/");
     await user.click(submitButton);
-
     expect(shortUrlField).toHaveValue("ShortUrl");
+    expect(await screen.findByText(ShortUrlResponseConstants.SUCCESS_MESSAGE)).toBeInTheDocument();
+  });
+
+  it("copies a short url after submitting a valid original url", async () => {
+    mockCreateShortUrl.mockResolvedValue(
+      new ShortUrlResponse(
+        ShortUrlResponseCodes.Success,
+        ShortUrlResponseConstants.SUCCESS_MESSAGE,
+        "ShortUrl"));
+
+    const user = userEvent.setup();
+    render(
+        <QueryProviderWrapper>
+            <UrlShortenerForm />
+        </QueryProviderWrapper>
+    );
+
+    const [submitButton, copyButton] = screen.getAllByRole("button");
+    const [originalUrlField, shortUrlField] = screen.getAllByRole("textbox");
+    expect(shortUrlField).toHaveValue("");
+
+    await user.type(originalUrlField, "https://example.com/");
+    await user.click(submitButton);
+    expect(shortUrlField).toHaveValue("ShortUrl");
+    expect(await screen.findByText(ShortUrlResponseConstants.SUCCESS_MESSAGE)).toBeInTheDocument();
+
+    await user.click(copyButton);
+    expect(await screen.findByText("Link copied to clipboard.")).toBeInTheDocument();
   });
 });
