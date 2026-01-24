@@ -1,6 +1,6 @@
 import { createShortUrl } from "@/api/create-short-url";
-import { DuplicateConflictResponse } from "@/responses/duplicate-conflict-response";
-import { NullShortUrlResponse } from "@/responses/null-short-url-response";
+import { ShortUrlResponseConstants } from "@/constants/short-url-response-constants";
+import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
 import { ShortUrlResponse } from "@/responses/short-url-response";
 import { AxiosError, AxiosHeaders } from "axios";
 import axios from "axios";
@@ -11,7 +11,10 @@ describe("createShortUrl", () => {
     });
 
     it("creates a short URL", async () => {
-        const expected = new ShortUrlResponse("ShortUrl");
+        const expected = new ShortUrlResponse(
+            ShortUrlResponseCodes.Success,
+            ShortUrlResponseConstants.SUCCESS_MESSAGE,
+            "ShortUrl");
         const actual = await createShortUrl("OriginalUrl");
 
         expect(actual).toEqual(expected);
@@ -24,8 +27,8 @@ describe("createShortUrl", () => {
             status: 409,
             statusText: "Conflict",
             data: {
-                error: "DuplicateConflict",
-                message: "Failed to generate a unique short URL. Please try again later."
+                error: ShortUrlResponseCodes.DuplicateConflict,
+                message: ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
             },
             headers: new AxiosHeaders(),
             config: mockConfig,
@@ -41,9 +44,9 @@ describe("createShortUrl", () => {
         vi.spyOn(axios, "post")
             .mockRejectedValue(axiosError);
 
-        const expected = new DuplicateConflictResponse(
-            "DuplicateConflict",
-            "Failed to generate a unique short URL. Please try again later."
+        const expected = new ShortUrlResponse(
+            ShortUrlResponseCodes.DuplicateConflict,
+            ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
         );
         const actual = await createShortUrl("duplicate");
 
@@ -51,7 +54,9 @@ describe("createShortUrl", () => {
     });
 
     it("returns NullShortUrlResponse on failure", async () => {
-        const expected = new NullShortUrlResponse();
+        const expected = new ShortUrlResponse(
+            ShortUrlResponseCodes.NullShortUrl,
+            ShortUrlResponseConstants.NULL_SHORT_URL_MESSAGE);
         const actual = await createShortUrl("error");
 
         expect(actual).toEqual(expected);

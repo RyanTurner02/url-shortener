@@ -5,11 +5,11 @@ import {
   UrlShortenerFormValues,
 } from "@/schemas/url-shortener-form-schema";
 import { ShortUrlResponse } from "@/responses/short-url-response";
-import { DuplicateConflictResponse } from "@/responses/duplicate-conflict-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
-import { NullShortUrlResponse } from "@/responses/null-short-url-response";
+import { toast } from "sonner";
+import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
 
 export default function useUrlShortenerForm() {
   const form = useForm<UrlShortenerFormValues>({
@@ -22,24 +22,23 @@ export default function useUrlShortenerForm() {
 
   const onSubmit = async (data: UrlShortenerFormValues) => {
     if (!canResubmit.current && data.originalUrl === previousOriginalUrl.current) {
+      toast.info(`Short URL for "${data.originalUrl}" has already been created.`);
       return;
     }
 
     previousOriginalUrl.current = data.originalUrl;
 
-    const result:
-      | ShortUrlResponse
-      | DuplicateConflictResponse
-      | NullShortUrlResponse = await createShortUrlMutation(data.originalUrl);
+    const result: ShortUrlResponse = await createShortUrlMutation(data.originalUrl);
 
-    if (result instanceof ShortUrlResponse) {
+    if (result.code === ShortUrlResponseCodes.Success) {
+      toast.success(result.message);
       form.setValue("shortenedUrl", result.shortUrl);
       canResubmit.current = false;
-    } else if (result instanceof DuplicateConflictResponse) {
-      // TODO: Display toast with error message.
+    } else if (result.code === ShortUrlResponseCodes.DuplicateConflict) {
+      toast.error(result.message);
       canResubmit.current = true;
-    } else if (result instanceof NullShortUrlResponse) {
-      // TODO: Display toast with error message.
+    } else if (result.code === ShortUrlResponseCodes.NullShortUrl) {
+      toast.error(result.message);
       canResubmit.current = true;
     }
   };

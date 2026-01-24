@@ -1,5 +1,5 @@
-import { DuplicateConflictResponse } from "@/responses/duplicate-conflict-response";
-import { NullShortUrlResponse } from "@/responses/null-short-url-response";
+import { ShortUrlResponseConstants } from "@/constants/short-url-response-constants";
+import { ShortUrlResponseCodes } from "@/enums/short-url-response-codes";
 import { ShortUrlResponse } from "@/responses/short-url-response";
 import axios from "axios";
 
@@ -7,7 +7,7 @@ import axios from "axios";
  * Creates a short URL from a given URL.
  * 
  * @param {string} url - The URL to shorten.
- * @returns {Promise<ShortUrlResponse | DuplicateConflictResponse | NullShortUrlResponse>}
+ * @returns {Promise<ShortUrlResponse>}
  */
 export const createShortUrl = async (url: string) => {
     try {
@@ -15,16 +15,21 @@ export const createShortUrl = async (url: string) => {
             Url: url
         });
 
-        return new ShortUrlResponse(response.data.shortUrl);
+        return new ShortUrlResponse(
+            ShortUrlResponseCodes.Success,
+            ShortUrlResponseConstants.SUCCESS_MESSAGE,
+            response.data.shortUrl);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response && error.response.status === 409) {
-                return new DuplicateConflictResponse(
+                return new ShortUrlResponse(
                     error.response.data.error,
                     error.response.data.message);
             }
         }
 
-        return new NullShortUrlResponse();
+        return new ShortUrlResponse(
+            ShortUrlResponseCodes.NullShortUrl,
+            ShortUrlResponseConstants.NULL_SHORT_URL_MESSAGE);
     }
 }

@@ -22,5 +22,8 @@ describe("ShortenedUrlField", () => {
     expect(input).toHaveAttribute("placeholder", placeholderText);
     expect(input).toHaveAttribute("readonly");
     expect(input).toHaveValue("");
+
+    const button = screen.getByRole("button");
+    expect(button).toBeInTheDocument();
   });
 });

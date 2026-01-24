@@ -12,7 +12,7 @@ describe("OriginalUrlField", () => {
 
   it("renders the original URL field", async () => {
     const labelRegex = /paste your long link here/i;
-    const placeholderText = "https://example.com/long-url-here";
+    const placeholderText = "https://example.com/";
     const userInput = "https://example.com/";
     const user = userEvent.setup();
     render(<Wrapper />);
