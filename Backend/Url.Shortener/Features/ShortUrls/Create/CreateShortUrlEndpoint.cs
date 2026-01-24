@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 
 namespace Url.Shortener.Features.ShortUrls.Create
 {
@@ -28,8 +29,17 @@ namespace Url.Shortener.Features.ShortUrls.Create
         private static async Task<IResult> CreateShortUrl(
             CreateShortUrlCommand createShortUrlCommand,
             ISender sender,
+            IValidator<CreateShortUrlCommand> validator,
             HttpRequest req)
         {
+            var result = await validator.ValidateAsync(createShortUrlCommand);
+
+            if (!result.IsValid)
+            {
+                return TypedResults.BadRequest(
+                    result.Errors.Select(e => e.ErrorMessage));
+            }
+
             var shortUrlHash = await sender.Send(createShortUrlCommand);
 
             if (string.IsNullOrEmpty(shortUrlHash))
