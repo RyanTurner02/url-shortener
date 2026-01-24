@@ -1,4 +1,6 @@
-﻿namespace Url.Shortener.Features.ShortUrls
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Url.Shortener.Features.ShortUrls
 {
     /// <summary>
     /// Entity class for storing the mapping between an original URL and its shortened form.
@@ -9,17 +11,20 @@
         /// Primary key.
         /// </summary>
         public int Id { get; set; }
-        
+
         /// <summary>
         /// The full original url to be shortened.
         /// </summary>
+        [Required]
+        [Url(ErrorMessage = "Invalid URL.")]
+        [MaxLength(128, ErrorMessage = "URL must not exceed 128 characters.")]
         public required string OriginalUrl { get; set; }
-        
+
         /// <summary>
         /// The generated shortened url.
         /// </summary>
         public required string ShortenedUrl { get; set; }
-        
+
         /// <summary>
         /// UTC timestamp when the entry was created.
         /// </summary>
