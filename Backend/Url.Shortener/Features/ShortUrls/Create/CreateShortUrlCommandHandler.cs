@@ -39,16 +39,18 @@ namespace Url.Shortener.Features.ShortUrls.Create
         /// <returns>The shortened URL.</returns>
         public async Task<string> Handle(CreateShortUrlCommand request, CancellationToken cancellationToken)
         {
-            var originalUrlDb = await _shortUrlRepository.GetShortUrl(request.Url);
-            if (!string.IsNullOrEmpty(originalUrlDb))
+            var originalUrl = request.Url.Trim();
+
+            var shortUrlDb = await _shortUrlRepository.GetShortUrl(originalUrl);
+            if (!string.IsNullOrEmpty(shortUrlDb))
             {
-                return originalUrlDb;
+                return shortUrlDb;
             }
 
             var shortUrl = new ShortUrl
             {
-                OriginalUrl = request.Url,
-                ShortenedUrl = await _urlShortenerService.ShortenUrl(request.Url),
+                OriginalUrl = originalUrl,
+                ShortenedUrl = await _urlShortenerService.ShortenUrl(originalUrl),
             };
 
             if (string.IsNullOrEmpty(shortUrl.ShortenedUrl))
