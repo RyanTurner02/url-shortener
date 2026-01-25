@@ -34,6 +34,9 @@ export default function useUrlShortenerForm() {
       toast.success(result.message);
       form.setValue("shortenedUrl", result.shortUrl);
       canResubmit.current = false;
+    } else if (result.code === ShortUrlResponseCodes.InvalidUrl) {
+      toast.error(result.message);
+      canResubmit.current = false;
     } else if (result.code === ShortUrlResponseCodes.DuplicateConflict) {
       toast.error(result.message);
       canResubmit.current = true;
