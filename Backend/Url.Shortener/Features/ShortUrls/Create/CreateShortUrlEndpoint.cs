@@ -37,7 +37,8 @@ namespace Url.Shortener.Features.ShortUrls.Create
             if (!result.IsValid)
             {
                 return TypedResults.BadRequest(
-                    result.Errors.Select(e => e.ErrorMessage));
+                    new InvalidUrlResponse(
+                        result.Errors.First().ErrorMessage));
             }
 
             var shortUrlHash = await sender.Send(createShortUrlCommand);

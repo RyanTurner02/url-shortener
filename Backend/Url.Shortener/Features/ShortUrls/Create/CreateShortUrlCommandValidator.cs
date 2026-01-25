@@ -12,9 +12,10 @@ namespace Url.Shortener.Features.ShortUrls.Create
         /// </summary>
         public CreateShortUrlCommandValidator()
         {
-            RuleFor(x => x.Url).NotEmpty();
-            RuleFor(x => x.Url).MaximumLength(128).WithMessage("URL must not exceed 128 characters.");
-            RuleFor(x => x.Url).Must(BeAValidUrl).WithMessage("Invalid URL.");
+            RuleFor(x => x.Url)
+                .MaximumLength(128)
+                .Must(BeAValidUrl)
+                .WithMessage("URL must be valid and not exceed 128 characters.");
         }
 
         /// <summary>
