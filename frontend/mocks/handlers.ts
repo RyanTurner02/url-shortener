@@ -13,10 +13,6 @@ export const handlers = [
             });
         }
 
-        if (body.Url === "error") {
-            return HttpResponse.error();
-        }
-
         if (body.Url === "duplicate") {
             return HttpResponse.json({
                 error: ShortUrlResponseCodes.DuplicateConflict,
@@ -29,6 +25,10 @@ export const handlers = [
                 error: ShortUrlResponseCodes.InvalidUrl,
                 message: ShortUrlResponseConstants.INVALID_URL_MESSAGE
             })
+        }
+
+        if (body.Url === "error") {
+            return HttpResponse.error();
         }
 
         return HttpResponse.json({
