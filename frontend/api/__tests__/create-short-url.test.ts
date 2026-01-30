@@ -25,7 +25,7 @@ describe("createShortUrl", () => {
         const mockConfig = { headers: new AxiosHeaders() };
         const mockResponse = {
             status: 409,
-            statusText: "Conflict",
+            statusText: "",
             data: {
                 error: ShortUrlResponseCodes.DuplicateConflict,
                 message: ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
@@ -35,8 +35,8 @@ describe("createShortUrl", () => {
             request: mockRequest
         };
         const axiosError = new AxiosError(
-            "Request failed with status code 404",
-            "ERR_BAD_REQUEST",
+            "",
+            "",
             mockConfig,
             mockRequest,
             mockResponse
