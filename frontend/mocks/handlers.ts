@@ -24,6 +24,13 @@ export const handlers = [
             });
         }
 
+        if (body.Url === "invalid") {
+            return HttpResponse.json({
+                error: ShortUrlResponseCodes.InvalidUrl,
+                message: ShortUrlResponseConstants.INVALID_URL_MESSAGE
+            })
+        }
+
         return HttpResponse.json({
             ShortUrl: "http://localhost:5000/ShortUrl"
         })
