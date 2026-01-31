@@ -10,6 +10,30 @@ namespace Url.Shortener.Tests.Features.ShortUrls.Create
 {
     public sealed class CreateShortUrlEndpointTests
     {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("example")]
+        [InlineData("example.com")]
+        [InlineData("www.example.com")]
+        public async Task CreateShortUrl_InvalidUrl_ReturnsBadRequest(string url)
+        {
+            var route = "/";
+            var payload = new { url = url };
+
+            await using var app = new WebApplicationFactory<Program>();
+            using var client = app.CreateClient();
+
+            var response = await client.PostAsJsonAsync(route, payload);
+            var body = await response.Content.ReadFromJsonAsync<InvalidUrlResponse>();
+
+            Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
+
+            Assert.NotNull(body);
+            Assert.Equal("InvalidUrl", body.Error);
+            Assert.Equal("URL must be valid and not exceed 128 characters.", body.Message);
+        }
+
         [Fact]
         public async Task CreateShortUrl_ReturnsProblem()
         {
