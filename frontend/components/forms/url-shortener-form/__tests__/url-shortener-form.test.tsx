@@ -32,7 +32,7 @@ describe("UrlShortenerForm", () => {
     expect(shortUrlField).toBeInTheDocument();
   });
 
-  it("displays a field error when submitting an invalid original url", async () => {
+  it("displays an invalid URL field error when submitting an invalid original url", async () => {
     const user = userEvent.setup();
     render(
         <QueryProviderWrapper>
@@ -45,7 +45,31 @@ describe("UrlShortenerForm", () => {
     
     const error = screen.getByRole("alert");
     expect(error).toBeInTheDocument();
-    expect(error).toHaveTextContent("Invalid URL");
+    expect(error).toHaveTextContent("Invalid URL.");
+  });
+
+  it("displays max length field error for oversized original urls", async () => {
+    const user = userEvent.setup();
+    render(
+      <QueryProviderWrapper>
+        <UrlShortenerForm />
+      </QueryProviderWrapper>,
+    );
+
+    const maxLength = 128;
+    const baseUrl = "https://example.com/";
+    const urlPath = "a".repeat(maxLength - baseUrl.length + 1);
+    const url = `${baseUrl}${urlPath}`;
+
+    const [originalUrlField] = screen.getAllByRole("textbox");
+    await user.type(originalUrlField, url);
+
+    const [submitButton] = screen.getAllByRole("button");
+    await user.click(submitButton);
+
+    const error = screen.getByRole("alert");
+    expect(error).toBeInTheDocument();
+    expect(error).toHaveTextContent("URL must not exceed 128 characters.");
   });
 
   it("removes the field error after typing a valid original url", async () => {
