@@ -1,10 +1,10 @@
 # Backend
 
-This is the backend API for the URL Shortener web app, built with **.NET 9**.
+This is the backend API for the URL Shortener web app, built with **.NET 10**.
 
 ## Prerequisites
 
-* .NET SDK 9.0+
+* .NET SDK 10.0+
 * Visual Studio 2026
 * MySQL 8.0+
 * Docker
