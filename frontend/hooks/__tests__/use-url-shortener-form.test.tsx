@@ -94,6 +94,30 @@ describe("useUrlShortenerForm", () => {
     expect(form.getValues().shortenedUrl).toBe("ShortUrl");
   });
 
+    it("displays an error toast with the invalid original url message", async () => {
+    const errorToastSpy = vi.spyOn(toast, "error");
+
+    mockCreateShortUrl.mockResolvedValue(new ShortUrlResponse(
+      ShortUrlResponseCodes.InvalidUrl,
+      ShortUrlResponseConstants.INVALID_URL_MESSAGE));
+
+    const invalidUrl = "InvalidUrl";
+    const { result } = renderHook(() => useUrlShortenerForm(), {
+      wrapper: QueryProviderWrapper,
+    });
+    const { onSubmit } = result.current;
+
+    await act(async () => {
+      await onSubmit({ originalUrl: invalidUrl });
+    });
+
+    expect(errorToastSpy).toHaveBeenCalledWith(ShortUrlResponseConstants.INVALID_URL_MESSAGE);
+    expect(errorToastSpy).toHaveBeenCalledOnce();
+
+    expect(mockCreateShortUrl).toHaveBeenCalledWith(invalidUrl);
+    expect(mockCreateShortUrl).toHaveBeenCalledOnce();
+  });
+
   it("allows resubmitting when there is a duplicate error", async () => {
     const successToastSpy = vi.spyOn(toast, "success");
     const errorToastSpy = vi.spyOn(toast, "error");
