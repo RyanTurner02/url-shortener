@@ -36,7 +36,7 @@ export default function useUrlShortenerForm() {
       canResubmit.current = false;
     } else if (result.code === ShortUrlResponseCodes.InvalidUrl) {
       toast.error(result.message);
-      canResubmit.current = false;
+      canResubmit.current = true;
     } else if (result.code === ShortUrlResponseCodes.DuplicateConflict) {
       toast.error(result.message);
       canResubmit.current = true;
