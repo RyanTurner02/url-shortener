@@ -9,17 +9,17 @@
         /// Primary key.
         /// </summary>
         public int Id { get; set; }
-        
+
         /// <summary>
         /// The full original url to be shortened.
         /// </summary>
         public required string OriginalUrl { get; set; }
-        
+
         /// <summary>
         /// The generated shortened url.
         /// </summary>
         public required string ShortenedUrl { get; set; }
-        
+
         /// <summary>
         /// UTC timestamp when the entry was created.
         /// </summary>

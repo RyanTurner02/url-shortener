@@ -21,10 +21,16 @@ export const createShortUrl = async (url: string) => {
             response.data.shortUrl);
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            if (error.response && error.response.status === 409) {
-                return new ShortUrlResponse(
-                    error.response.data.error,
-                    error.response.data.message);
+            if (error.response) {
+                if (error.response.status === 400) {
+                    return new ShortUrlResponse(
+                        error.response.data.error,
+                        error.response.data.message);
+                } else if (error.response.status === 409) {
+                    return new ShortUrlResponse(
+                        error.response.data.error,
+                        error.response.data.message);
+                }
             }
         }
 

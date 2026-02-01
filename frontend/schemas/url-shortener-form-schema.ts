@@ -1,7 +1,12 @@
 import * as z from "zod";
+import { isWebUri } from "valid-url";
 
 export const urlShortenerFormSchema = z.object({
-  originalUrl: z.url(),
+  originalUrl:
+    z.string()
+      .trim()
+      .max(128, "URL must not exceed 128 characters.")
+      .refine(x => isWebUri(x), { error: "Invalid URL." }),
   shortenedUrl: z.string().optional(),
 });
 

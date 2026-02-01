@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Url.Shortener.Features.ShortUrls.Common;
 using Url.Shortener.Features.ShortUrls.Create.Utilities;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 builder.Services.AddScoped<IUrlRandomizer, UrlRandomizer>();
 builder.Services.AddScoped<IUrlShortenerService, UrlShortenerService>();
 builder.Services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
+builder.Services.AddScoped<IValidator<CreateShortUrlCommand>, CreateShortUrlCommandValidator>();
 
 builder.Services.AddCors(options =>
 {

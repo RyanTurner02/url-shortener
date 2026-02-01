@@ -25,7 +25,7 @@ describe("createShortUrl", () => {
         const mockConfig = { headers: new AxiosHeaders() };
         const mockResponse = {
             status: 409,
-            statusText: "Conflict",
+            statusText: "",
             data: {
                 error: ShortUrlResponseCodes.DuplicateConflict,
                 message: ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
@@ -35,8 +35,8 @@ describe("createShortUrl", () => {
             request: mockRequest
         };
         const axiosError = new AxiosError(
-            "Request failed with status code 404",
-            "ERR_BAD_REQUEST",
+            "",
+            "",
             mockConfig,
             mockRequest,
             mockResponse
@@ -49,6 +49,38 @@ describe("createShortUrl", () => {
             ShortUrlResponseConstants.DUPLICATE_CONFLICT_MESSAGE
         );
         const actual = await createShortUrl("duplicate");
+
+        expect(actual).toEqual(expected);
+    });
+
+    it("returns InvalidUrlResponse on invalid URLs", async () => {
+        const mockRequest = {};
+        const mockConfig = { headers: new AxiosHeaders() };
+        const mockResponse = {
+            status: 400,
+            statusText: "",
+            data: {
+                error: ShortUrlResponseCodes.InvalidUrl,
+                message: ShortUrlResponseConstants.INVALID_URL_MESSAGE
+            },
+            headers: new AxiosHeaders(),
+            config: mockConfig,
+            request: mockRequest
+        };
+        const axiosError = new AxiosError(
+            "",
+            "",
+            mockConfig,
+            mockRequest,
+            mockResponse
+        );
+        vi.spyOn(axios, "post")
+            .mockRejectedValue(axiosError);
+
+        const expected = new ShortUrlResponse(
+            ShortUrlResponseCodes.InvalidUrl,
+            ShortUrlResponseConstants.INVALID_URL_MESSAGE);
+        const actual = await createShortUrl("invalid");
 
         expect(actual).toEqual(expected);
     });
