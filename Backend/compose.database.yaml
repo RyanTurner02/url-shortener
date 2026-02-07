@@ -1,0 +1,12 @@
+services:
+  db:
+    image: mysql:9.6.0
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+volumes:
+  db:
