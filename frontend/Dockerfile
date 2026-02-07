@@ -44,6 +44,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 COPY . .
 # Run the build script.
 RUN npm run build
+# Run the unit tests.
+RUN npx vitest run
 
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
