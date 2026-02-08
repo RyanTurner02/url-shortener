@@ -17,6 +17,10 @@ if (builder.Environment.IsDevelopment())
 {
     connectionString = builder.Configuration["Database:ConnectionString"];
 }
+else if (builder.Environment.IsProduction())
+{
+    // TODO
+}
 
 builder.Services.AddDbContext<ShortUrlDbContext>(options =>
 {

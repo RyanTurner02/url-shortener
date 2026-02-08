@@ -6,22 +6,27 @@ This is the backend API for the URL Shortener web app, built with **.NET 10**.
 
 * .NET SDK 10.0+
 * Visual Studio 2026
-* MySQL 8.0+
 * Docker
 
 ## Database Setup
 
-1. Install and run MySQL
-2. Create a new database for the URL shortener
-3. Open the terminal
-4. Navigate to the `url-shortener/Backend/Url.Shortener` project directory
-5. Apply the database migrations:
+1. Open **Docker**, **File Explorer**, and the **Terminal**
+2. Navigate to the `url-shortener/Backend` directory
+3. Copy `.env.example` to a new file named `.env` and update the values as needed
+4. Start the MySQL Docker container:
+
+```bash
+docker compose -f compose.database.yaml up --build
+```
+
+5. Navigate to the `./Url.Shortener` project directory
+6. Apply the database migrations:
 
 ```bash
 dotnet ef database update
 ```
 
-6. Add the database connection string secret:
+7. Add the database connection string secret:
 
 ```bash
 dotnet user-secrets set "Database:ConnectionString" "server=<SERVER>; database=<DATABASE>; user=<USER>; password=<PASSWORD>;"
